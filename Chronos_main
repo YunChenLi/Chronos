@@ -19,7 +19,8 @@ extension Color {
         case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
-            (a, r, g, b) = (1, 1, 1, 0) // Default to clear
+            // 修正: 為了實現真正的「clear」，a, r, g, b 應為 0
+            (a, r, g, b) = (0, 0, 0, 0) // Default to clear
         }
         
         self.init(
@@ -54,9 +55,11 @@ struct Appointment: Identifiable, Codable {
     var email: String?
     var phone: String?
     var amount: Double? // 消費金額 (可選)
-    var photoDescription: String? // 圖片描述/備註
+    var photoDescription: String?
+    // 圖片描述/備註
     var isPhotoAttached: Bool = false
-    var extraServiceDetail: String? // 如果服務是「其他」，記錄額外詳情
+    var extraServiceDetail: String?
+    // 如果服務是「其他」，記錄額外詳情
     
     var displayAmount: Double {
         return amount ?? 0.0
@@ -79,6 +82,7 @@ struct GeneralTransaction: Identifiable, Codable {
 }
 
 
+// MARK: - 輔助視圖 (Helper Views)
 
 struct CalendarGridView: View {
     let daysInMonth: [Date]
@@ -185,8 +189,6 @@ struct DayCellView: View {
     }
 }
 
-// MARK: - 4. 支出報告視圖 (Report View - Tab 4)
-
 struct ProportionChart: View {
     let data: [(label: String, value: Double)]
     let total: Double
@@ -199,7 +201,7 @@ struct ProportionChart: View {
                 let item = data[index]
                 let color = colors[index % colors.count]
                 let percentage = item.value / total
-                
+           
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(item.label)
@@ -233,6 +235,358 @@ struct ProportionChart: View {
     }
 }
 
+
+// MARK: - 1. 預約列表視圖 (Appointment List View - Tab 1) Helper
+
+/// **已移至頂層**：預約列表的單元格視圖
+struct AppointmentRow: View {
+    let appointment: Appointment
+    let members: [Member]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                // 優化：使用 guard let 簡化查找成員顏色的邏輯
+                let memberColor = members.first(where: { $0.name == appointment.name })?.colorHex ?? "#000000"
+                Circle()
+                    .fill(Color(hex: memberColor))
+                    .frame(width: 10, height: 10)
+                    .padding(.trailing, 4)
+
+                Text(appointment.name)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                Text(appointment.service)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.indigo.opacity(0.15))
+                    .foregroundColor(.indigo)
+                    .cornerRadius(8)
+            }
+            
+            // 顯示額外服務描述
+            if let detail = appointment.extraServiceDetail, !detail.isEmpty {
+                Text("附註: \(detail)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            
+            // 日期與時間
+            HStack(spacing: 4) {
+                Image(systemName: "clock")
+                Text(appointment.date, style: .date)
+                Text("@")
+                Text(appointment.date, style: .time)
+            }
+            .font(.footnote)
+            .foregroundColor(.secondary)
+        
+            // 消費金額
+            if let amount = appointment.amount {
+                Text("金額: $\(amount, specifier: "%.0f") (預約支出)")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.red)
+            }
+          
+            // 照片備註提示
+            if let desc = appointment.photoDescription, !desc.isEmpty || appointment.isPhotoAttached {
+                HStack(spacing: 4) {
+                    Image(systemName: appointment.isPhotoAttached ? "photo.fill" : "camera.fill").foregroundColor(.orange)
+                    Text(appointment.isPhotoAttached ? "已附加照片" : "已記錄文字備註")
+                }
+                .font(.caption)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+
+/// **已移至頂層**：預約列表視圖 (Tab 1)
+struct AppointmentListView: View {
+    @Binding var appointments: [Appointment]
+    let members: [Member]
+    var saveAction: () -> Void
+    var deleteAction: (IndexSet) -> Void
+    
+    @State private var isShowingAddAppointment = false
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                if appointments.isEmpty {
+                    Spacer()
+                    ContentUnavailableView {
+                        Label("目前沒有預約", systemImage: "calendar.badge.plus")
+                    } description: {
+                        Text("點擊右上角的「+」新增一個預約。")
+                    }
+                    Spacer()
+                } else {
+                    List {
+                        // 依據日期排序預約
+                        ForEach(appointments.sorted(by: { $0.date < $1.date })) { appointment in
+                            
+                            // 點擊後進入編輯頁面
+                            NavigationLink(destination: EditAppointmentView(
+                                // 確保 EditAppointmentView 接受一個 Appointment 的 Binding
+                                appointment: Binding(
+                                    get: { self.appointments.first(where: { $0.id == appointment.id })! },
+                                    set: { newValue in
+                                        if let index = self.appointments.firstIndex(where: { $0.id == newValue.id }) {
+                                            self.appointments[index] = newValue
+                                        }
+                                    }
+                                ),
+                                saveAction: saveAction
+                            )) {
+                                // **修正點**：使用我們新的 AppointmentRow 子 View
+                                AppointmentRow(appointment: appointment, members: members)
+                            }
+                        }
+                        .onDelete(perform: deleteAction)
+                    }
+                    .listStyle(.insetGrouped)
+                }
+            }
+            .navigationTitle("預約列表")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if !appointments.isEmpty {
+                        EditButton()
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isShowingAddAppointment = true
+                    } label: {
+                        Label("新增預約", systemImage: "plus.circle.fill")
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingAddAppointment) {
+                AddAppointmentView(appointments: $appointments, members: members, saveAction: saveAction)
+            }
+        }
+    }
+}
+
+
+// MARK: - 2. 預約歷史記錄視圖 (History View - Tab 2)
+
+/// **已移至頂層**：預約歷史記錄視圖 (Tab 2)
+struct HistoryView: View {
+    let appointments: [Appointment]
+
+    var groupedAppointments: [String: [Appointment]] {
+        Dictionary(grouping: appointments.sorted(by: { $0.date > $1.date })) { appointment in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy年 MM月"
+            return formatter.string(from: appointment.date)
+        }
+    }
+    
+    var sortedKeys: [String] {
+        groupedAppointments.keys.sorted(by: >)
+    }
+
+    var body: some View {
+        NavigationView {
+            List {
+                if appointments.isEmpty {
+                    ContentUnavailableView {
+                        Label("無歷史記錄", systemImage: "clock.badge.xmark")
+                    } description: {
+                        Text("新增預約後，記錄將在此處按月份分類顯示。")
+                    }
+                } else {
+                    ForEach(sortedKeys, id: \.self) { month in
+                        Section(header: Text(month).font(.headline).foregroundColor(.indigo)) {
+                            ForEach(groupedAppointments[month]!) { appointment in
+                                VStack(alignment: .leading, spacing: 5) {
+                                    HStack {
+                                        Text(appointment.name)
+                                            .fontWeight(.semibold)
+                                        Spacer()
+                                        Text(appointment.service)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                            .padding(.horizontal, 8)
+                                            .background(Color.indigo.opacity(0.1))
+                                            .cornerRadius(5)
+                                    }
+              
+                                    if let detail = appointment.extraServiceDetail, !detail.isEmpty {
+                                        Text("附註: \(detail)")
+                                            .font(.caption2)
+                                            .foregroundColor(.secondary)
+                                    }
+                       
+                                    HStack {
+                                        Text(appointment.date, style: .time)
+                                            .font(.subheadline)
+                                
+                                        if let amount = appointment.amount {
+                                            Text("|")
+                                                .foregroundColor(.secondary)
+                                            Text("預約支出: $\(amount, specifier: "%.0f")")
+                                                .foregroundColor(.red)
+                                                .fontWeight(.medium)
+                                        }
+        
+                                        if appointment.isPhotoAttached {
+                                            Text("|")
+                                                .foregroundColor(.secondary)
+                                            Image(systemName: "photo.fill")
+                                                .foregroundColor(.orange)
+                                        }
+                                    }
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("預約歷史記錄")
+        }
+    }
+}
+
+// MARK: - 3. 收入/支出視圖 (Income Expense View - Tab 3)
+
+/// **已移至頂層**：收入/支出視圖 (Tab 3)
+struct IncomeExpenseView: View {
+    let appointments: [Appointment]
+    @Binding var generalTransactions: [GeneralTransaction]
+    let members: [Member]
+    var saveAction: () -> Void
+    
+    @State private var currentDate = Date()
+    @State private var isAddingTransaction = false
+    @State private var selectedDate: Date?
+    // 計算當前顯示月份的開始和結束日期
+    var monthStart: Date {
+        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: currentDate))!
+    }
+    var monthEnd: Date {
+        Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart)!
+    }
+    
+    // 計算日曆網格所需的日期
+    var daysInMonth: [Date] {
+        var dates: [Date] = []
+        let range = Calendar.current.range(of: .day, in: .month, for: monthStart)!
+        for i in range {
+            if let date = Calendar.current.date(byAdding: .day, value: i - 1, to: monthStart) {
+                dates.append(date)
+            }
+        }
+        return dates
+    }
+    
+    // 取得指定日期所有交易 (預約 + 一般)
+    func getDailyTransactions(for date: Date) -> (totalExpense: Double, totalIncome: Double, expenseMembers: [String: Double]) {
+        let dayStart = Calendar.current.startOfDay(for: date)
+        let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
+        var totalExpense = 0.0
+        var totalIncome = 0.0
+        var expenseMembers: [String: Double] = [:]
+        
+        // 1. 預約支出
+        let dailyAppointments = appointments.filter { $0.date >= dayStart && $0.date < dayEnd && $0.amount != nil }
+        for appt in dailyAppointments {
+            totalExpense += appt.amount!
+            expenseMembers[appt.name, default: 0] += appt.amount!
+        }
+        
+        // 2. 一般交易
+        let dailyTransactions = generalTransactions.filter { $0.date >= dayStart && $0.date < dayEnd }
+        for transaction in dailyTransactions {
+            if transaction.type == .expense {
+                totalExpense += transaction.amount
+                expenseMembers[transaction.memberName, default: 0] += transaction.amount
+            } else {
+                totalIncome += transaction.amount
+            }
+        }
+        
+        return (totalExpense, totalIncome, expenseMembers)
+    }
+
+    // 月份導航
+    func changeMonth(by value: Int) {
+        if let newDate = Calendar.current.date(byAdding: .month, value: value, to: currentDate) {
+            currentDate = newDate
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // 月份導航
+                HStack {
+                    Button { changeMonth(by: -1) } label: { Image(systemName: "chevron.left") }
+                    Spacer()
+                    Text(monthStart, format: .dateTime.year().month())
+                        .font(.title2).fontWeight(.bold)
+                    Spacer()
+                    Button { changeMonth(by: 1) } label: { Image(systemName: "chevron.right") }
+                }
+                .padding()
+                .background(Color(.systemBackground))
+
+                // 日曆網格
+                CalendarGridView(daysInMonth: daysInMonth, members: members, getDailyTransactions: getDailyTransactions) { date in
+                    selectedDate = date
+                    isAddingTransaction = true
+                }
+                .padding(.horizontal)
+                
+                // 支出總結圖例
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(members.sorted { $0.name < $1.name }) { member in
+                            HStack {
+                                Circle()
+                                    .fill(Color(hex: member.colorHex))
+                                    .frame(width: 10, height: 10)
+                                Text(member.name)
+                                    .font(.caption)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .navigationTitle("收支月曆")
+            .sheet(isPresented: $isAddingTransaction) {
+                AddGeneralTransactionView(
+                    generalTransactions: $generalTransactions,
+                    members: members,
+                    saveAction: saveAction,
+                    initialDate: selectedDate ?? Date()
+                )
+            }
+        }
+    }
+}
+
+
+// MARK: - 4. 支出報告視圖 (Report View - Tab 4)
+
+/// **已移至頂層**：支出報告視圖 (Tab 4)
 struct ReportView: View {
     let appointments: [Appointment]
     let generalTransactions: [GeneralTransaction]
@@ -296,7 +650,7 @@ struct ReportView: View {
         var monthlyTotals: [String: Double] = [:]
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy年 MM月"
-        
+       
         // 1. 預約支出
         for appt in appointments where appt.amount != nil {
             let month = formatter.string(from: appt.date)
@@ -356,17 +710,17 @@ struct ReportView: View {
                                     case .member:
                                         return memberTotals.map { ($0.member, Double($0.total)) }
                                     case .month:
-                                        return serviceTotals.map { ($0.service, Double($0.total)) }
+                                        // **修正**：當選擇月份報告時，應使用 monthTotals
+                                        return monthTotals.map { ($0.month, Double($0.total)) }
                                     }
                                 }() // 括號表示立即執行這個閉包
-                                
+                     
                                 ProportionChart(
                                     data: chartData,
                                     total: overallTotalExpense
                                 )
                                 .listRowInsets(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
                             }
-                            
                             
                             // 分類切換選擇器
                             Picker("分類方式", selection: $selectedCategory) {
@@ -422,282 +776,504 @@ struct ReportView: View {
                                 }
                             }
                         }
-                            .listStyle(.insetGrouped)
                     }
+                    .listStyle(.insetGrouped)
                 }
-                    .navigationTitle("支出報告")
+                .navigationTitle("支出報告")
             }
         }
     }
+}
+
+
+// MARK: - 5. 成員管理視圖 (Member Management View - Tab 5)
+
+/// **已移至頂層**：成員管理視圖 (Tab 5)
+struct MemberManagementView: View {
+    @Binding var members: [Member]
+    var saveAction: () -> Void
     
-    // MARK: - 5. 成員管理視圖 (Member Management View - Tab 5)
-    struct MemberManagementView: View {
-        @Binding var members: [Member]
-        var saveAction: () -> Void
-        
-        @State private var newMemberName: String = ""
-        @State private var selectedColorHex: String = Color.memberHexes.first! // 預設第一個顏色
-        
-        var body: some View {
-            NavigationView {
-                VStack {
-                    Form {
-                        Section("新增家庭成員") {
-                            HStack {
-                                TextField("輸入成員姓名", text: $newMemberName)
-                                    .textInputAutocapitalization(.words)
-                                
-                                Button {
-                                    addMember()
-                                } label: {
-                                    Image(systemName: "plus.circle.fill")
-                                        .foregroundColor(.indigo)
-                                }
-                                .disabled(newMemberName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                            }
-                        }
-                        
-                        Section("選擇成員代表色") {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack {
-                                    ForEach(Color.memberHexes, id: \.self) { hex in
-                                        Circle()
-                                            .fill(Color(hex: hex))
-                                            .frame(width: 30, height: 30)
-                                            .overlay(
-                                                hex == selectedColorHex ?
-                                                Circle().stroke(Color.primary, lineWidth: 2) : nil
-                                            )
-                                            .onTapGesture {
-                                                selectedColorHex = hex
-                                            }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        Section("現有家庭成員列表") {
-                            if members.isEmpty {
-                                Text("目前沒有成員。")
-                                    .foregroundColor(.secondary)
-                            } else {
-                                List {
-                                    ForEach(members) { member in
-                                        HStack {
-                                            Circle()
-                                                .fill(Color(hex: member.colorHex))
-                                                .frame(width: 15, height: 15)
-                                            Text(member.name)
-                                            Spacer()
-                                        }
-                                    }
-                                    .onDelete(perform: deleteMembers)
-                                }
-                            }
-                        }
-                    }
-                }
-                .navigationTitle("成員管理")
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        if !members.isEmpty {
-                            EditButton()
-                        }
-                    }
-                }
-            }
-        }
-        
-        func addMember() {
-            let trimmedName = newMemberName.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmedName.isEmpty else { return }
-            
-            let newMember = Member(name: trimmedName, colorHex: selectedColorHex)
-            members.append(newMember)
-            members.sort { $0.name < $1.name }
-            saveAction()
-            
-            newMemberName = ""
-            
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-        }
-        
-        func deleteMembers(at offsets: IndexSet) {
-            members.remove(atOffsets: offsets)
-            saveAction()
-        }
-    }
+    @State private var newMemberName: String = ""
+    @State private var selectedColorHex: String = Color.memberHexes.first!
+    // 預設第一個顏色
     
-    // MARK: - 6. 新增日常交易視圖 (Add General Transaction View)
-    struct AddGeneralTransactionView: View {
-        @Binding var generalTransactions: [GeneralTransaction]
-        let members: [Member]
-        var saveAction: () -> Void
-        let initialDate: Date
-        
-        @Environment(\.dismiss) var dismiss
-        
-        @State private var amountInput: String = ""
-        @State private var transactionDate: Date
-        @State private var selectedMember: Member?
-        @State private var description: String = ""
-        @State private var transactionType: GeneralTransaction.TransactionType = .expense
-        
-        init(generalTransactions: Binding<[GeneralTransaction]>, members: [Member], saveAction: @escaping () -> Void, initialDate: Date) {
-            self._generalTransactions = generalTransactions
-            self.members = members
-            self.saveAction = saveAction
-            self.initialDate = initialDate
-            self._transactionDate = State(initialValue: initialDate)
-            
-            // 預設選擇第一個成員
-            if let firstMember = members.first {
-                self._selectedMember = State(initialValue: firstMember)
-            } else {
-                self._selectedMember = State(initialValue: nil)
-            }
-        }
-        
-        var isSaveButtonDisabled: Bool {
-            amountInput.isEmpty || selectedMember == nil
-        }
-        
-        var body: some View {
-            NavigationView {
+    var body: some View {
+        NavigationView {
+            VStack {
                 Form {
-                    Picker("類型", selection: $transactionType) {
-                        Text("支出 (Expense)").tag(GeneralTransaction.TransactionType.expense)
-                        Text("收入 (Income)").tag(GeneralTransaction.TransactionType.income)
+                    Section("新增家庭成員") {
+                        HStack {
+                            TextField("輸入成員姓名", text: $newMemberName)
+                                .textInputAutocapitalization(.words)
+    
+                            Button {
+                                addMember()
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundColor(.indigo)
+                            }
+                            .disabled(newMemberName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        }
                     }
-                    .pickerStyle(.segmented)
                     
-                    Section("基本資訊") {
-                        DatePicker("日期與時間", selection: $transactionDate, displayedComponents: [.date, .hourAndMinute])
-                            .datePickerStyle(.compact)
-                        
-                        if !members.isEmpty {
-                            Picker("歸屬成員", selection: $selectedMember) {
-                                ForEach(members, id: \.self) { member in
+                    Section("選擇成員代表色") {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(Color.memberHexes, id: \.self) { hex in
+                                    Circle()
+                                        .fill(Color(hex: hex))
+                                        .frame(width: 30, height: 30)
+                                        .overlay(
+                                            hex == selectedColorHex ?
+                                            Circle().stroke(Color.primary, lineWidth: 2) : nil
+                                        )
+                                        .onTapGesture {
+                                            selectedColorHex = hex
+                                        }
+                                }
+                            }
+                        }
+                    }
+                    
+                    Section("現有家庭成員列表") {
+                        if members.isEmpty {
+                            Text("目前沒有成員。")
+                                .foregroundColor(.secondary)
+                        } else {
+                            List {
+                                ForEach(members) { member in
                                     HStack {
                                         Circle()
                                             .fill(Color(hex: member.colorHex))
-                                            .frame(width: 10, height: 10)
+                                            .frame(width: 15, height: 15)
                                         Text(member.name)
+                                        Spacer()
                                     }
-                                    .tag(Optional(member))
                                 }
+                                .onDelete(perform: deleteMembers)
                             }
-                        } else {
-                            Text("⚠️ 請先在「成員管理」頁面新增家庭成員")
-                                .foregroundColor(.orange)
-                        }
-                        
-                        HStack {
-                            Text(transactionType == .expense ? "支出金額" : "收入金額")
-                            Spacer()
-                            TextField("金額", text: $amountInput)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .foregroundColor(transactionType == .expense ? .red : .green)
                         }
                     }
-                    
-                    Section("說明/備註 (選填)") {
-                        TextEditor(text: $description)
-                            .frame(height: 80)
-                    }
-                    
-                    Button("儲存交易記錄") {
-                        saveTransaction()
-                    }
-                    .disabled(isSaveButtonDisabled)
-                    .frame(maxWidth: .infinity)
-                    .buttonStyle(.borderedProminent)
                 }
-                .navigationTitle(transactionType == .expense ? "新增日常支出" : "新增日常收入")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("取消") { dismiss() }
+            }
+            .navigationTitle("成員管理")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if !members.isEmpty {
+                        EditButton()
                     }
                 }
             }
         }
+    }
+    
+    func addMember() {
+        let trimmedName = newMemberName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
         
-        func saveTransaction() {
-            guard let member = selectedMember,
-                  let parsedAmount = Double(amountInput.trimmingCharacters(in: .whitespacesAndNewlines))
-            else { return }
-            
-            let trimmedDesc = description.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            let newTransaction = GeneralTransaction(
-                date: transactionDate,
-                memberName: member.name,
-                amount: parsedAmount,
-                description: trimmedDesc.isEmpty ? (transactionType == .expense ? "一般支出" : "一般收入") : trimmedDesc,
-                type: transactionType
-            )
-            
-            generalTransactions.append(newTransaction)
-            saveAction()
-            dismiss()
+        let newMember = Member(name: trimmedName, colorHex: selectedColorHex)
+        members.append(newMember)
+        members.sort { $0.name < $1.name }
+        saveAction()
+        
+        newMemberName = ""
+        
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+    }
+    
+    func deleteMembers(at offsets: IndexSet) {
+        members.remove(atOffsets: offsets)
+        saveAction()
+    }
+}
+
+// MARK: - 6. 新增日常交易視圖 (Add General Transaction View)
+
+/// **已移至頂層**：新增日常交易視圖
+struct AddGeneralTransactionView: View {
+    @Binding var generalTransactions: [GeneralTransaction]
+    let members: [Member]
+    var saveAction: () -> Void
+    let initialDate: Date
+    
+    @Environment(\.dismiss) var dismiss
+ 
+    @State private var amountInput: String = ""
+    @State private var transactionDate: Date
+    @State private var selectedMember: Member?
+    @State private var description: String = ""
+    @State private var transactionType: GeneralTransaction.TransactionType = .expense
+    
+    init(generalTransactions: Binding<[GeneralTransaction]>, members: [Member], saveAction: @escaping () -> Void, initialDate: Date) {
+        self._generalTransactions = generalTransactions
+        self.members = members
+        self.saveAction = saveAction
+        self.initialDate = initialDate
+        self._transactionDate = State(initialValue: initialDate)
+        
+        // 預設選擇第一個成員
+        if let firstMember = members.first {
+            self._selectedMember = State(initialValue: firstMember)
+        } else {
+            self._selectedMember = State(initialValue: nil)
         }
     }
     
+    var isSaveButtonDisabled: Bool {
+        amountInput.isEmpty || selectedMember == nil
+    }
     
-    // MARK: - 7. 編輯預約視圖 (Edit Appointment View)
-    struct EditAppointmentView: View {
-        @Binding var appointment: Appointment
-        var saveAction: () -> Void
-        @Environment(\.dismiss) var dismiss
-        
-        @State private var amountInput: String
-        @State private var photoDescription: String
-        @State private var isPhotoAttached: Bool
-        @State private var extraServiceDetail: String
-        
-        init(appointment: Binding<Appointment>, saveAction: @escaping () -> Void) {
-            self._appointment = appointment
-            self.saveAction = saveAction
-            
-            _amountInput = State(initialValue: appointment.wrappedValue.amount.map { String(format: "%.0f", $0) } ?? "")
-            _photoDescription = State(initialValue: appointment.wrappedValue.photoDescription ?? "")
-            self._isPhotoAttached = State(initialValue: appointment.wrappedValue.isPhotoAttached)
-            _extraServiceDetail = State(initialValue: appointment.wrappedValue.extraServiceDetail ?? "")
-        }
-        
-        var body: some View {
+    var body: some View {
+        NavigationView {
             Form {
-                // MARK: 預約摘要 (不可修改欄位)
-                Section("預約者與服務資訊") {
-                    HStack {
-                        Image(systemName: "person.circle.fill").foregroundColor(.indigo)
-                        Text("客戶/成員: \(appointment.name)")
-                    }
-                    HStack {
-                        Image(systemName: "tag.square.fill").foregroundColor(.indigo)
-                        Text("服務: \(appointment.service)")
-                    }
-                    HStack {
-                        Image(systemName: "calendar.badge.clock.fill").foregroundColor(.indigo)
-                        Text("時間: \(appointment.date, style: .date) \(appointment.date, style: .time)")
+                Picker("類型", selection: $transactionType) {
+                    Text("支出 (Expense)").tag(GeneralTransaction.TransactionType.expense)
+                    Text("收入 (Income)").tag(GeneralTransaction.TransactionType.income)
+                }
+                .pickerStyle(.segmented)
+                
+                Section("基本資訊") {
+                    DatePicker("日期與時間", selection: $transactionDate, displayedComponents: [.date, .hourAndMinute])
+                        .datePickerStyle(.compact)
+                    
+                    if !members.isEmpty {
+                        Picker("歸屬成員", selection: $selectedMember) {
+                            ForEach(members, id: \.self) { member in
+                                HStack {
+                                    Circle()
+                                        .fill(Color(hex: member.colorHex))
+                                        .frame(width: 10, height: 10)
+                                    Text(member.name)
+                                }
+                                .tag(Optional(member))
+                            }
+                        }
+                    } else {
+                        Text("⚠️ 請先在「成員管理」頁面新增家庭成員")
+                            .foregroundColor(.orange)
                     }
                     
-                    // 額外服務內容編輯
-                    if appointment.service.contains("其他") || !(appointment.extraServiceDetail ?? "").isEmpty {
-                        VStack(alignment: .leading) {
-                            Text("額外服務內容")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextField("請描述額外服務內容", text: $extraServiceDetail, axis: .vertical)
-                                .lineLimit(2...5)
+                    HStack {
+                        Text(transactionType == .expense ? "支出金額" : "收入金額")
+                        Spacer()
+                        TextField("金額", text: $amountInput)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(transactionType == .expense ? .red : .green)
+                    }
+                }
+                
+                Section("說明/備註 (選填)") {
+                    TextEditor(text: $description)
+                        .frame(height: 80)
+                }
+                
+                Button("儲存交易記錄") {
+                    saveTransaction()
+                }
+                .disabled(isSaveButtonDisabled)
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.borderedProminent)
+            }
+            .navigationTitle(transactionType == .expense ? "新增日常支出" : "新增日常收入")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("取消") { dismiss() }
+                }
+            }
+        }
+    }
+    
+    func saveTransaction() {
+        guard let member = selectedMember,
+              let parsedAmount = Double(amountInput.trimmingCharacters(in: .whitespacesAndNewlines))
+        else { return }
+        
+        let trimmedDesc = description.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let newTransaction = GeneralTransaction(
+            date: transactionDate,
+            memberName: member.name,
+            amount: parsedAmount,
+            description: trimmedDesc.isEmpty ? (transactionType == .expense ? "一般支出" : "一般收入") : trimmedDesc,
+            type: transactionType
+        )
+        
+        generalTransactions.append(newTransaction)
+        saveAction()
+        dismiss()
+    }
+}
+
+
+// MARK: - 7. 編輯預約視圖 (Edit Appointment View)
+
+/// **已移至頂層**：編輯預約視圖
+struct EditAppointmentView: View {
+    @Binding var appointment: Appointment
+    var saveAction: () -> Void
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var amountInput: String
+    @State private var photoDescription: String
+    @State private var isPhotoAttached: Bool
+    @State private var extraServiceDetail: String
+    
+    init(appointment: Binding<Appointment>, saveAction: @escaping () -> Void) {
+        self._appointment = appointment
+        self.saveAction = saveAction
+        
+        _amountInput = State(initialValue: appointment.wrappedValue.amount.map { String(format: "%.0f", $0) } ?? "")
+        _photoDescription = State(initialValue: appointment.wrappedValue.photoDescription ?? "")
+        self._isPhotoAttached = State(initialValue: appointment.wrappedValue.isPhotoAttached)
+        _extraServiceDetail = State(initialValue: appointment.wrappedValue.extraServiceDetail ?? "")
+    }
+    
+    var body: some View {
+        Form {
+            // MARK: 預約摘要 (不可修改欄位)
+            Section("預約者與服務資訊") {
+                HStack {
+                    Image(systemName: "person.circle.fill").foregroundColor(.indigo)
+                    Text("客戶/成員: \(appointment.name)")
+                }
+                HStack {
+                    Image(systemName: "tag.square.fill").foregroundColor(.indigo)
+                    Text("服務: \(appointment.service)")
+                }
+                HStack {
+                    Image(systemName: "calendar.badge.clock.fill").foregroundColor(.indigo)
+                    Text("時間: \(appointment.date, style: .date) \(appointment.date, style: .time)")
+                }
+            
+                // 額外服務內容編輯
+                if appointment.service.contains("其他") || !(appointment.extraServiceDetail ?? "").isEmpty {
+                    VStack(alignment: .leading) {
+                        Text("額外服務內容")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        TextField("請描述額外服務內容", text: $extraServiceDetail, axis: .vertical)
+                            .lineLimit(2...5)
+                    }
+                }
+            }
+            
+            // MARK: 消費金額修改
+            Section("修改消費金額") {
+                HStack {
+                    Text("$")
+                        .foregroundColor(.secondary)
+                    TextField("金額", text: $amountInput)
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
+         
+            // MARK: 照片記錄與管理
+            Section("照片記錄與管理") {
+                VStack(alignment: .leading, spacing: 10) {
+                    if isPhotoAttached {
+                        VStack(alignment: .center, spacing: 10) {
+                            Text("⚠️ 圖片功能模擬 (Canvas 限制)")
+                                .font(.caption).foregroundColor(.red)
+                         
+                            Image(systemName: "photo.on.rectangle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 100)
+                                .foregroundColor(.gray.opacity(0.7))
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                .padding(.vertical, 5)
+                            
+                            Button("移除附加照片") {
+                                isPhotoAttached = false
+                            }
+                            .foregroundColor(.red)
+                        }
+                        .frame(maxWidth: .infinity)
+                        
+                    } else {
+                        Button {
+                            isPhotoAttached = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "camera.on.rectangle.fill")
+                                Text("拍照記錄 (模擬)")
+                            }
+                        }
+                        
+                        Button {
+                            isPhotoAttached = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "photo.stack.fill")
+                                Text("從相簿選擇檔案 (模擬)")
+                            }
                         }
                     }
                 }
                 
-                // MARK: 消費金額修改
-                Section("修改消費金額") {
+                // 備註文本區域
+                TextEditor(text: $photoDescription)
+                    .frame(height: 100)
+                    .overlay(
+                        Text(photoDescription.isEmpty ? "新增照片相關文字描述或備註..." : "")
+                            .foregroundColor(.secondary)
+                            .allowsHitTesting(false)
+                            .padding(.top, 8)
+                            .padding(.leading, 5),
+                        alignment: .topLeading
+                    )
+            }
+            
+            // 儲存按鈕
+            Button("儲存修改並更新記錄") {
+                saveChanges()
+            }
+            .frame(maxWidth: .infinity)
+            .buttonStyle(.borderedProminent)
+            .padding(.top)
+        }
+        .navigationTitle("編輯歷史記錄")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    func saveChanges() {
+        let trimmedAmount = amountInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        let parsedAmount = Double(trimmedAmount)
+        
+        appointment.amount = parsedAmount
+        
+        let trimmedPhotoDesc = photoDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        appointment.photoDescription = trimmedPhotoDesc.isEmpty ? nil : trimmedPhotoDesc
+        
+        let trimmedExtraDetail = extraServiceDetail.trimmingCharacters(in: .whitespacesAndNewlines)
+        appointment.extraServiceDetail = trimmedExtraDetail.isEmpty ? nil : trimmedExtraDetail
+        
+        appointment.isPhotoAttached = isPhotoAttached
+        
+        saveAction()
+        dismiss()
+    }
+}
+
+
+// MARK: - 8. 新增預約視圖 (Add Appointment View)
+
+/// **已移至頂層**：新增預約視圖
+struct AddAppointmentView: View {
+    @Binding var appointments: [Appointment]
+    let members: [Member]
+    var saveAction: () -> Void
+    
+    @Environment(\.dismiss) var dismiss
+    
+    let eventStore = EKEventStore()
+    
+    // 服務項目新增 Emoji/圖標
+    private let availableServices = [
+        "💇 剪髮 (Haircut)",
+        "💆 按摩 (Massage)",
+        "💬 諮詢 (Consultation)",
+        "💅 美甲 (Manicure)",
+        "❓ 其他 (Other)"
+    ]
+    
+    // 預約者名稱選項，包含家庭成員和一個「手動輸入」選項
+    enum NameSource: String, CaseIterable, Identifiable {
+        case member = "家庭成員"
+        case manual = "新增非成員姓名"
+        var id: String { self.rawValue }
+    }
+    
+    @State private var calendarStatusMessage: String?
+    @State private var isShowingStatusAlert = false
+    
+    // 預約者資訊
+    @State private var nameSource: NameSource = .manual
+    @State private var name: String = ""
+    @State private var selectedMember: Member?
+    @State private var service: String = "💇 剪髮 (Haircut)"
+    @State private var date: Date = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+    @State private var email: String = ""
+    @State private var phone: String = ""
+    @State private var amountInput: String = ""
+    @State private var photoDescription: String = ""
+    @State private var extraServiceDetail: String = ""
+    
+    var finalName: String {
+        if nameSource == .manual {
+            return name
+        } else {
+            return selectedMember?.name ?? (members.first?.name ?? "")
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                // MARK: 預約者資訊 (新增成員選擇邏輯)
+                Section("預約者/家庭成員 (必填)") {
+                    Picker("預約者來源", selection: $nameSource) {
+                        Text("新增非成員姓名").tag(NameSource.manual)
+                        
+                        if !members.isEmpty {
+                            Text("選擇家庭成員").tag(NameSource.member)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    if nameSource == .manual {
+                        TextField("預約者姓名", text: $name)
+                            .textInputAutocapitalization(.words)
+                    } else if nameSource == .member && !members.isEmpty {
+                        Picker("選擇成員", selection: $selectedMember) {
+                            ForEach(members, id: \.self) { member in
+                                HStack {
+                                    Circle()
+                                        .fill(Color(hex: member.colorHex))
+                                        .frame(width: 10, height: 10)
+                                    Text(member.name)
+                                }
+                                .tag(Optional(member))
+                            }
+                        }
+                        .onAppear {
+                            if selectedMember == nil, let first = members.first {
+                                selectedMember = first
+                            }
+                        }
+                    } else if nameSource == .member && members.isEmpty {
+                        Text("⚠️ 請先在「成員管理」頁面新增家庭成員")
+                            .foregroundColor(.orange)
+                            .onAppear {
+                                nameSource = .manual // 強制切換回手動輸入
+                            }
+                    }
+                }
+                
+                // MARK: 預約服務資訊
+                Section("預約服務資訊") {
+                    Picker("服務項目", selection: $service) {
+                        ForEach(availableServices, id: \.self) { serviceOption in
+                            Text(serviceOption)
+                        }
+                    }
+                   
+                    // 根據服務項目顯示額外輸入欄位
+                    if service.contains("其他") {
+                        TextField("請描述額外服務內容", text: $extraServiceDetail, axis: .vertical)
+                            .lineLimit(2...5)
+                    }
+                    
+                    DatePicker("日期與時間", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                        .datePickerStyle(.compact)
+                }
+                
+                // MARK: 消費金額
+                Section("消費金額 (必填)") {
                     HStack {
                         Text("$")
                             .foregroundColor(.secondary)
@@ -707,836 +1283,285 @@ struct ReportView: View {
                     }
                 }
                 
-                // MARK: 照片記錄與管理
-                Section("照片記錄與管理") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        if isPhotoAttached {
-                            VStack(alignment: .center, spacing: 10) {
-                                Text("⚠️ 圖片功能模擬 (Canvas 限制)")
-                                    .font(.caption).foregroundColor(.red)
-                                
-                                Image(systemName: "photo.on.rectangle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 100)
-                                    .foregroundColor(.gray.opacity(0.7))
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(10)
-                                    .padding(.vertical, 5)
-                                
-                                Button("移除附加照片") {
-                                    isPhotoAttached = false
-                                }
-                                .foregroundColor(.red)
-                            }
-                            .frame(maxWidth: .infinity)
-                            
-                        } else {
-                            Button {
-                                isPhotoAttached = true
-                            } label: {
-                                HStack {
-                                    Image(systemName: "camera.on.rectangle.fill")
-                                    Text("拍照記錄 (模擬)")
-                                }
-                            }
-                            
-                            Button {
-                                isPhotoAttached = true
-                            } label: {
-                                HStack {
-                                    Image(systemName: "photo.stack.fill")
-                                    Text("從相簿選擇檔案 (模擬)")
-                                }
-                            }
-                        }
-                    }
-                    
-                    // 備註文本區域
+                // MARK: 客戶聯絡資訊
+                Section("客戶聯絡資訊 (選填)") {
+                    TextField("郵件地址 (Email)", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                 
+                    TextField("電話號碼 (Phone)", text: $phone)
+                        .keyboardType(.phonePad)
+                }
+                
+                // MARK: 照片/記錄備註
+                Section("照片/記錄備註 (選填)") {
                     TextEditor(text: $photoDescription)
                         .frame(height: 100)
-                        .overlay(
-                            Text(photoDescription.isEmpty ? "新增照片相關文字描述或備註..." : "")
-                                .foregroundColor(.secondary)
-                                .allowsHitTesting(false)
-                                .padding(.top, 8)
-                                .padding(.leading, 5),
-                            alignment: .topLeading
-                        )
                 }
                 
-                // 儲存按鈕
-                Button("儲存修改並更新記錄") {
-                    saveChanges()
+                // 提交按鈕
+                Button("儲存預約，並設定本地提醒") {
+                    saveAppointment()
                 }
+                .disabled(finalName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || amountInput.isEmpty)
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
-                .padding(.top)
             }
-            .navigationTitle("編輯歷史記錄")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-        
-        func saveChanges() {
-            let trimmedAmount = amountInput.trimmingCharacters(in: .whitespacesAndNewlines)
-            let parsedAmount = Double(trimmedAmount)
-            
-            appointment.amount = parsedAmount
-            
-            let trimmedPhotoDesc = photoDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-            appointment.photoDescription = trimmedPhotoDesc.isEmpty ? nil : trimmedPhotoDesc
-            
-            let trimmedExtraDetail = extraServiceDetail.trimmingCharacters(in: .whitespacesAndNewlines)
-            appointment.extraServiceDetail = trimmedExtraDetail.isEmpty ? nil : trimmedExtraDetail
-            
-            appointment.isPhotoAttached = isPhotoAttached
-            
-            saveAction()
-            dismiss()
+            .navigationTitle("新增預約")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("取消") {
+                        dismiss()
+                    }
+                }
+            }
+            .alert("預約同步狀態", isPresented: $isShowingStatusAlert) {
+                Button("確定") {
+                    self.dismiss()
+                }
+            } message: {
+                Text(calendarStatusMessage ?? "發生未知錯誤。")
+            }
         }
     }
     
+    /// 將新預約添加到列表、日曆並設定通知
+    func saveAppointment() {
+        let parsedAmount = Double(amountInput.trimmingCharacters(in: .whitespacesAndNewlines))
+        let trimmedPhotoDesc = photoDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let detail = service.contains("其他") ? extraServiceDetail.trimmingCharacters(in: .whitespacesAndNewlines) : ""
+        let trimmedDetail = detail.isEmpty ? nil : detail
+        
+        let newAppointment = Appointment(
+            name: finalName,
+            date: date,
+            service: service,
+            email: email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : email,
+            phone: phone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : phone,
+            amount: parsedAmount,
+            photoDescription: trimmedPhotoDesc.isEmpty ? nil : trimmedPhotoDesc,
+            isPhotoAttached: false,
+            extraServiceDetail: trimmedDetail
+        )
+        
+        appointments.append(newAppointment)
+        saveAction()
+        
+        scheduleLocalNotification(appointment: newAppointment)
+        addEventToCalendar(appointment: newAppointment)
+    }
+
+    // MARK: - 本地通知邏輯
+    func scheduleLocalNotification(appointment: Appointment) {
+        let center = UNUserNotificationCenter.current()
+        guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -30, to: appointment.date) else { return }
+        guard reminderDate > Date() else { return }
+        
+        let content = UNMutableNotificationContent()
+        content.title = "⏰ 預約提醒：服務將於 30 分鐘後開始"
+        content.body = "客戶：\(appointment.name)；服務：\(appointment.service)。請準時準備。"
+        content.sound = UNNotificationSound.default
+        
+        let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
+        let request = UNNotificationRequest(identifier: appointment.id.uuidString, content: content, trigger: trigger)
+        
+        center.add(request) { error in
+            if let error = error { print("Error scheduling notification: \(error.localizedDescription)") }
+        }
+    }
     
-    // MARK: - 8. 新增預約視圖 (Add Appointment View)
-    struct AddAppointmentView: View {
-        @Binding var appointments: [Appointment]
-        let members: [Member]
-        var saveAction: () -> Void
-        
-        @Environment(\.dismiss) var dismiss
-        
-        let eventStore = EKEventStore()
-        
-        // 服務項目新增 Emoji/圖標
-        private let availableServices = [
-            "💇 剪髮 (Haircut)",
-            "💆 按摩 (Massage)",
-            "💬 諮詢 (Consultation)",
-            "💅 美甲 (Manicure)",
-            "❓ 其他 (Other)"
-        ]
-        
-        // 預約者名稱選項，包含家庭成員和一個「手動輸入」選項
-        enum NameSource: String, CaseIterable, Identifiable {
-            case member = "家庭成員"
-            case manual = "新增非成員姓名"
-            var id: String { self.rawValue }
-        }
-        
-        @State private var calendarStatusMessage: String?
-        @State private var isShowingStatusAlert = false
-        
-        // 預約者資訊
-        @State private var nameSource: NameSource = .manual
-        @State private var name: String = ""
-        @State private var selectedMember: Member?
-        @State private var service: String = "💇 剪髮 (Haircut)"
-        @State private var date: Date = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
-        @State private var email: String = ""
-        @State private var phone: String = ""
-        @State private var amountInput: String = ""
-        @State private var photoDescription: String = ""
-        @State private var extraServiceDetail: String = ""
-        
-        var finalName: String {
-            if nameSource == .manual {
-                return name
-            } else {
-                return selectedMember?.name ?? (members.first?.name ?? "")
-            }
-        }
-        
-        var body: some View {
-            NavigationView {
-                Form {
-                    // MARK: 預約者資訊 (新增成員選擇邏輯)
-                    Section("預約者/家庭成員 (必填)") {
-                        Picker("預約者來源", selection: $nameSource) {
-                            Text("新增非成員姓名").tag(NameSource.manual)
-                            if !members.isEmpty {
-                                Text("選擇家庭成員").tag(NameSource.member)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        
-                        if nameSource == .manual {
-                            TextField("預約者姓名", text: $name)
-                                .textInputAutocapitalization(.words)
-                        } else if nameSource == .member && !members.isEmpty {
-                            Picker("選擇成員", selection: $selectedMember) {
-                                ForEach(members, id: \.self) { member in
-                                    HStack {
-                                        Circle()
-                                            .fill(Color(hex: member.colorHex))
-                                            .frame(width: 10, height: 10)
-                                        Text(member.name)
-                                    }
-                                    .tag(Optional(member))
-                                }
-                            }
-                            .onAppear {
-                                if selectedMember == nil, let first = members.first {
-                                    selectedMember = first
-                                }
-                            }
-                        } else if nameSource == .member && members.isEmpty {
-                            Text("⚠️ 請先在「成員管理」頁面新增家庭成員")
-                                .foregroundColor(.orange)
-                                .onAppear {
-                                    nameSource = .manual // 強制切換回手動輸入
-                                }
-                        }
-                    }
+    // MARK: - 日曆同步邏輯
+    func addEventToCalendar(appointment: Appointment) {
+        eventStore.requestFullAccessToEvents { granted, error in
+            DispatchQueue.main.async {
+                if granted && error == nil {
+                    let event = EKEvent(eventStore: self.eventStore)
+                    event.title = "預約: \(appointment.service) (\(appointment.name))"
+                    event.startDate = appointment.date
+                    event.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: appointment.date)!
+                    var notes = "服務項目: \(appointment.service)\n預約者: \(appointment.name)"
+                    if let detail = appointment.extraServiceDetail { notes += "\n額外服務: \(detail)" }
+                    // **修正**：修正金額的字串格式
+                    if let amount = appointment.amount { notes += "\n消費金額: $\(String(format: "%.0f", amount))" }
+                    if let photoDesc = appointment.photoDescription { notes += "\n照片備註: \(photoDesc)" }
+                    if let email = appointment.email { notes += "\n郵件: \(email)" }
+                    if let phone = appointment.phone { notes += "\n電話: \(phone)" }
+                    if appointment.isPhotoAttached { notes += "\n [已附加服務照片記錄] " }
                     
-                    // MARK: 預約服務資訊
-                    Section("預約服務資訊") {
-                        Picker("服務項目", selection: $service) {
-                            ForEach(availableServices, id: \.self) { serviceOption in
-                                Text(serviceOption)
-                            }
-                        }
-                        
-                        // 根據服務項目顯示額外輸入欄位
-                        if service.contains("其他") {
-                            TextField("請描述額外服務內容", text: $extraServiceDetail, axis: .vertical)
-                                .lineLimit(2...5)
-                        }
-                        
-                        DatePicker("日期與時間", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                            .datePickerStyle(.compact)
-                    }
-                    
-                    // MARK: 消費金額
-                    Section("消費金額 (必填)") {
-                        HStack {
-                            Text("$")
-                                .foregroundColor(.secondary)
-                            TextField("金額", text: $amountInput)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                        }
-                    }
-                    
-                    // MARK: 客戶聯絡資訊
-                    Section("客戶聯絡資訊 (選填)") {
-                        TextField("郵件地址 (Email)", text: $email)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                        
-                        TextField("電話號碼 (Phone)", text: $phone)
-                            .keyboardType(.phonePad)
-                    }
-                    
-                    // MARK: 照片/記錄備註
-                    Section("照片/記錄備註 (選填)") {
-                        TextEditor(text: $photoDescription)
-                            .frame(height: 100)
-                    }
-                    
-                    // 提交按鈕
-                    Button("儲存預約，並設定本地提醒") {
-                        saveAppointment()
-                    }
-                    .disabled(finalName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || amountInput.isEmpty)
-                    .frame(maxWidth: .infinity)
-                    .buttonStyle(.borderedProminent)
-                }
-                .navigationTitle("新增預約")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("取消") {
-                            dismiss()
-                        }
-                    }
-                }
-                .alert("預約同步狀態", isPresented: $isShowingStatusAlert) {
-                    Button("確定") {
-                        self.dismiss()
-                    }
-                } message: {
-                    Text(calendarStatusMessage ?? "發生未知錯誤。")
-                }
-            }
-        }
-        
-        /// 將新預約添加到列表、日曆並設定通知
-        func saveAppointment() {
-            let parsedAmount = Double(amountInput.trimmingCharacters(in: .whitespacesAndNewlines))
-            let trimmedPhotoDesc = photoDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            let detail = service.contains("其他") ? extraServiceDetail.trimmingCharacters(in: .whitespacesAndNewlines) : ""
-            let trimmedDetail = detail.isEmpty ? nil : detail
-            
-            let newAppointment = Appointment(
-                name: finalName,
-                date: date,
-                service: service,
-                email: email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : email,
-                phone: phone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : phone,
-                amount: parsedAmount,
-                photoDescription: trimmedPhotoDesc.isEmpty ? nil : trimmedPhotoDesc,
-                isPhotoAttached: false,
-                extraServiceDetail: trimmedDetail
-            )
-            
-            appointments.append(newAppointment)
-            saveAction()
-            
-            scheduleLocalNotification(appointment: newAppointment)
-            addEventToCalendar(appointment: newAppointment)
-        }
-        // MARK: - 1. 預約列表視圖 (Appointment List View - Tab 1)
-        // 將此結構體放在 AppointmentListView 的外面
-        struct AppointmentRow: View {
-            let appointment: Appointment
-            let members: [Member]
-            
-            var body: some View {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        // 優化：使用 guard let 簡化查找成員顏色的邏輯
-                        let memberColor = members.first(where: { $0.name == appointment.name })?.colorHex ?? "#000000"
-                        Circle()
-                            .fill(Color(hex: memberColor))
-                            .frame(width: 10, height: 10)
-                            .padding(.trailing, 4)
-
-                        Text(appointment.name)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                        
-                        Spacer()
-                        
-                        Text(appointment.service)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.indigo.opacity(0.15))
-                            .foregroundColor(.indigo)
-                            .cornerRadius(8)
-                    }
-                    
-                    // 顯示額外服務描述
-                    if let detail = appointment.extraServiceDetail, !detail.isEmpty {
-                        Text("附註: \(detail)")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    // 日期與時間 (修正了您原始碼中錯誤的 `Text`; `Text` 用法)
-                    HStack(spacing: 4) {
-                        Image(systemName: "clock")
-                        Text(appointment.date, style: .date)
-                        Text("@")
-                        Text(appointment.date, style: .time)
-                    }
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    
-                    // 消費金額
-                    if let amount = appointment.amount {
-                        Text("金額: $\(amount, specifier: "%.0f") (預約支出)")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.red)
-                    }
-                    
-                    // 照片備註提示
-                    if let desc = appointment.photoDescription, !desc.isEmpty || appointment.isPhotoAttached {
-                        HStack(spacing: 4) {
-                            Image(systemName: appointment.isPhotoAttached ? "photo.fill" : "camera.fill").foregroundColor(.orange)
-                            Text(appointment.isPhotoAttached ? "已附加照片" : "已記錄文字備註")
-                        }
-                        .font(.caption)
-                    }
-                }
-                .padding(.vertical, 4)
-            }
-        }
-
-
-        struct AppointmentListView: View {
-            @Binding var appointments: [Appointment]
-            let members: [Member]
-            var saveAction: () -> Void
-            var deleteAction: (IndexSet) -> Void
-            
-            @State private var isShowingAddAppointment = false
-            
-            var body: some View {
-                NavigationView {
-                    VStack {
-                        if appointments.isEmpty {
-                            Spacer()
-                            ContentUnavailableView {
-                                Label("目前沒有預約", systemImage: "calendar.badge.plus")
-                            } description: {
-                                Text("點擊右上角的「+」新增一個預約。")
-                            }
-                            Spacer()
-                        } else {
-                            List {
-                                // 依據日期排序預約
-                                ForEach(appointments.sorted(by: { $0.date < $1.date })) { appointment in
-                                    
-                                    // 點擊後進入編輯頁面
-                                    NavigationLink(destination: EditAppointmentView(
-                                        // 優化：查找綁定應該在 NavigationLink 內部完成，而不是在傳遞時查找索引
-                                        // 確保 EditAppointmentView 接受一個 Appointment 的 Binding
-                                        appointment: Binding(
-                                            get: { self.appointments.first(where: { $0.id == appointment.id })! },
-                                            set: { newValue in
-                                                if let index = self.appointments.firstIndex(where: { $0.id == newValue.id }) {
-                                                    self.appointments[index] = newValue
-                                                }
-                                            }
-                                        ),
-                                        saveAction: saveAction
-                                    )) {
-                                        // **修正點**：使用我們新的 AppointmentRow 子 View
-                                        AppointmentRow(appointment: appointment, members: members)
-                                    }
-                                }
-                                .onDelete(perform: deleteAction)
-                            }
-                            .listStyle(.insetGrouped)
-                        }
-                    }
-                    .navigationTitle("預約列表")
-                    // ... (toolbar 和 sheet 部分保持不變) ...
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            if !appointments.isEmpty {
-                                EditButton()
-                            }
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                isShowingAddAppointment = true
-                            } label: {
-                                Label("新增預約", systemImage: "plus.circle.fill")
-                            }
-                        }
-                    }
-                    .sheet(isPresented: $isShowingAddAppointment) {
-                        AddAppointmentView(appointments: $appointments, members: members, saveAction: saveAction)
-                    }
-                }
-            }
-        }
-
-
-        // MARK: - 2. 預約歷史記錄視圖 (History View - Tab 2)
-        struct HistoryView: View {
-            let appointments: [Appointment]
-
-            var groupedAppointments: [String: [Appointment]] {
-                Dictionary(grouping: appointments.sorted(by: { $0.date > $1.date })) { appointment in
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy年 MM月"
-                    return formatter.string(from: appointment.date)
-                }
-            }
-            
-            var sortedKeys: [String] {
-                groupedAppointments.keys.sorted(by: >)
-            }
-
-            var body: some View {
-                NavigationView {
-                    List {
-                        if appointments.isEmpty {
-                            ContentUnavailableView {
-                                Label("無歷史記錄", systemImage: "clock.badge.xmark")
-                            } description: {
-                                Text("新增預約後，記錄將在此處按月份分類顯示。")
-                            }
-                        } else {
-                            ForEach(sortedKeys, id: \.self) { month in
-                                Section(header: Text(month).font(.headline).foregroundColor(.indigo)) {
-                                    ForEach(groupedAppointments[month]!) { appointment in
-                                        VStack(alignment: .leading, spacing: 5) {
-                                            HStack {
-                                                Text(appointment.name)
-                                                    .fontWeight(.semibold)
-                                                Spacer()
-                                                Text(appointment.service)
-                                                    .font(.caption)
-                                                    .fontWeight(.medium)
-                                                    .padding(.horizontal, 8)
-                                                    .background(Color.indigo.opacity(0.1))
-                                                    .cornerRadius(5)
-                                            }
-                                            
-                                            if let detail = appointment.extraServiceDetail, !detail.isEmpty {
-                                                Text("附註: \(detail)")
-                                                    .font(.caption2)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            
-                                            HStack {
-                                                Text(appointment.date, style: .time)
-                                                    .font(.subheadline)
-                                                
-                                                if let amount = appointment.amount {
-                                                    Text("|")
-                                                        .foregroundColor(.secondary)
-                                                    Text("預約支出: $\(amount, specifier: "%.0f")")
-                                                        .foregroundColor(.red)
-                                                        .fontWeight(.medium)
-                                                }
-                                                
-                                                if appointment.isPhotoAttached {
-                                                    Text("|")
-                                                        .foregroundColor(.secondary)
-                                                    Image(systemName: "photo.fill")
-                                                        .foregroundColor(.orange)
-                                                }
-                                            }
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .navigationTitle("預約歷史記錄")
-                }
-            }
-        }
-
-        // MARK: - 3. 收入/支出視圖 (Income Expense View - Tab 3)
-
-        struct IncomeExpenseView: View {
-            let appointments: [Appointment]
-            @Binding var generalTransactions: [GeneralTransaction]
-            let members: [Member]
-            var saveAction: () -> Void
-            
-            @State private var currentDate = Date()
-            @State private var isAddingTransaction = false
-            @State private var selectedDate: Date?
-            
-            
-            // 計算當前顯示月份的開始和結束日期
-            var monthStart: Date {
-                Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: currentDate))!
-            }
-            var monthEnd: Date {
-                Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart)!
-            }
-            
-            // 計算日曆網格所需的日期
-            var daysInMonth: [Date] {
-                var dates: [Date] = []
-                let range = Calendar.current.range(of: .day, in: .month, for: monthStart)!
-                for i in range {
-                    if let date = Calendar.current.date(byAdding: .day, value: i - 1, to: monthStart) {
-                        dates.append(date)
-                    }
-                }
-                return dates
-            }
-            
-            // 取得指定日期所有交易 (預約 + 一般)
-            func getDailyTransactions(for date: Date) -> (totalExpense: Double, totalIncome: Double, expenseMembers: [String: Double]) {
-                let dayStart = Calendar.current.startOfDay(for: date)
-                let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)!
-                
-                var totalExpense = 0.0
-                var totalIncome = 0.0
-                var expenseMembers: [String: Double] = [:]
-                
-                // 1. 預約支出
-                let dailyAppointments = appointments.filter { $0.date >= dayStart && $0.date < dayEnd && $0.amount != nil }
-                for appt in dailyAppointments {
-                    totalExpense += appt.amount!
-                    expenseMembers[appt.name, default: 0] += appt.amount!
-                }
-                
-                // 2. 一般交易
-                let dailyTransactions = generalTransactions.filter { $0.date >= dayStart && $0.date < dayEnd }
-                for transaction in dailyTransactions {
-                    if transaction.type == .expense {
-                        totalExpense += transaction.amount
-                        expenseMembers[transaction.memberName, default: 0] += transaction.amount
-                    } else {
-                        totalIncome += transaction.amount
-                    }
-                }
-                
-                return (totalExpense, totalIncome, expenseMembers)
-            }
-
-            // 月份導航
-            func changeMonth(by value: Int) {
-                if let newDate = Calendar.current.date(byAdding: .month, value: value, to: currentDate) {
-                    currentDate = newDate
-                }
-            }
-            
-            var body: some View {
-                NavigationView {
-                    VStack(spacing: 0) {
-                        // 月份導航
-                        HStack {
-                            Button { changeMonth(by: -1) } label: { Image(systemName: "chevron.left") }
-                            Spacer()
-                            Text(monthStart, format: .dateTime.year().month())
-                                .font(.title2).fontWeight(.bold)
-                            Spacer()
-                            Button { changeMonth(by: 1) } label: { Image(systemName: "chevron.right") }
-                        }
-                        .padding()
-                        .background(Color(.systemBackground))
-
-                        // 日曆網格
-                        CalendarGridView(daysInMonth: daysInMonth, members: members, getDailyTransactions: getDailyTransactions) { date in
-                            selectedDate = date
-                            isAddingTransaction = true
-                        }
-                        .padding(.horizontal)
-                        
-                        // 支出總結圖例
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(members.sorted { $0.name < $1.name }) { member in
-                                    HStack {
-                                        Circle()
-                                            .fill(Color(hex: member.colorHex))
-                                            .frame(width: 10, height: 10)
-                                        Text(member.name)
-                                            .font(.caption)
-                                    }
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(8)
-                                }
-                            }
-                            .padding()
-                        }
-                    }
-                    .navigationTitle("收支月曆")
-                    .sheet(isPresented: $isAddingTransaction) {
-                        AddGeneralTransactionView(
-                            generalTransactions: $generalTransactions,
-                            members: members,
-                            saveAction: saveAction,
-                            initialDate: selectedDate ?? Date()
-                        )
-                    }
-                }
-            }
-        }
-
-        // MARK: - 本地通知邏輯
-        func scheduleLocalNotification(appointment: Appointment) {
-            let center = UNUserNotificationCenter.current()
-            guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -30, to: appointment.date) else { return }
-            guard reminderDate > Date() else { return }
-            
-            let content = UNMutableNotificationContent()
-            content.title = "⏰ 預約提醒：服務將於 30 分鐘後開始"
-            content.body = "客戶：\(appointment.name)；服務：\(appointment.service)。請準時準備。"
-            content.sound = UNNotificationSound.default
-            
-            let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
-            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
-            let request = UNNotificationRequest(identifier: appointment.id.uuidString, content: content, trigger: trigger)
-            
-            center.add(request) { error in
-                if let error = error { print("Error scheduling notification: \(error.localizedDescription)") }
-            }
-        }
-        
-        // MARK: - 日曆同步邏輯
-        func addEventToCalendar(appointment: Appointment) {
-            eventStore.requestFullAccessToEvents { granted, error in
-                DispatchQueue.main.async {
-                    if granted && error == nil {
-                        let event = EKEvent(eventStore: self.eventStore)
-                        event.title = "預約: \(appointment.service) (\(appointment.name))"
-                        event.startDate = appointment.date
-                        event.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: appointment.date)!
-                        
-                        var notes = "服務項目: \(appointment.service)\n預約者: \(appointment.name)"
-                        if let detail = appointment.extraServiceDetail { notes += "\n額外服務: \(detail)" }
-                        if let amount = appointment.amount { notes += "\n消費金額: $\(amount, default: "%.0f")" }
-                        if let photoDesc = appointment.photoDescription { notes += "\n照片備註: \(photoDesc)" }
-                        if let email = appointment.email { notes += "\n郵件: \(email)" }
-                        if let phone = appointment.phone { notes += "\n電話: \(phone)" }
-                        if appointment.isPhotoAttached { notes += "\n [已附加服務照片記錄] " }
-                        
-                        event.notes = notes
-                        event.calendar = self.eventStore.defaultCalendarForNewEvents
-                        
-                        do {
-                            try self.eventStore.save(event, span: .thisEvent)
-                            self.calendarStatusMessage = "✅ 預約已成功新增至日曆與本地通知！"
-                            self.isShowingStatusAlert = true
-                        } catch {
-                            self.calendarStatusMessage = "❌ 日曆儲存失敗: \(error.localizedDescription)"
-                            self.isShowingStatusAlert = true
-                        }
-                    } else {
-                        let errorMessage = error?.localizedDescription ?? "日曆權限被拒。請在設定中開啟。"
-                        self.calendarStatusMessage = "⚠️ 預約已儲存，但日曆同步失敗。\n原因: \(errorMessage)"
+                    event.notes = notes
+                    event.calendar = self.eventStore.defaultCalendarForNewEvents
+               
+                    do {
+                        try self.eventStore.save(event, span: .thisEvent)
+                        self.calendarStatusMessage = "✅ 預約已成功新增至日曆與本地通知！"
+                        self.isShowingStatusAlert = true
+                    } catch {
+                        self.calendarStatusMessage = "❌ 日曆儲存失敗: \(error.localizedDescription)"
                         self.isShowingStatusAlert = true
                     }
+                } else {
+                    let errorMessage = error?.localizedDescription ?? "日曆權限被拒。請在設定中開啟。"
+                    self.calendarStatusMessage = "⚠️ 預約已儲存，但日曆同步失敗。\n原因: \(errorMessage)"
+                    self.isShowingStatusAlert = true
                 }
             }
         }
     }
-    
-    // MARK: - 主內容視圖 (Main Tab View Wrapper)
-    
-    struct ContentView: View {
-        @State private var appointments: [Appointment] = []
-        @State private var members: [Member] = []
-        @State private var generalTransactions: [GeneralTransaction] = [] // 新增：日常交易
-        
-        private let appointmentKey = "StoredAppointments"
-        private let memberKey = "StoredMembers"
-        private let transactionKey = "StoredGeneralTransactions" // 日常交易儲存鍵
-        
-        init() {
-            _appointments = State(initialValue: loadAppointments())
-            _members = State(initialValue: loadMembers())
-            _generalTransactions = State(initialValue: loadTransactions()) // 載入交易
-            requestNotificationPermission()
-        }
-        
-        func requestNotificationPermission() {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                if granted {
-                    print("Notification permission granted.")
-                } else if let error = error {
-                    print("Notification permission error: \(error.localizedDescription)")
-                } else {
-                    print("Notification permission denied.")
-                }
-            }
-        }
-        var body: some View {
-            TabView {
-                // MARK: Tab 1: 預約列表
-                AppointmentListView(
-                    appointments: $appointments,
-                    members: members,
-                    saveAction: saveAppointments,
-                    deleteAction: deleteAppointments
-                )
-                .tabItem {
-                    Label("預約列表", systemImage: "list.bullet.clipboard")
-                }
-                
-                // MARK: Tab 2: 預約歷史
-                HistoryView(appointments: appointments)
-                    .tabItem {
-                        Label("預約歷史", systemImage: "clock.fill")
-                    }
-                
-                // MARK: Tab 3: 收入/支出 (新增)
-                IncomeExpenseView(
-                    appointments: appointments,
-                    generalTransactions: $generalTransactions,
-                    members: members,
-                    saveAction: saveTransactions
-                )
-                .tabItem {
-                    Label("收入/支出", systemImage: "dollarsign.circle.fill")
-                }
-                
-                // MARK: Tab 4: 支出報告
-                ReportView(
-                    appointments: appointments,
-                    generalTransactions: generalTransactions,
-                    members: members
-                )
-                .tabItem {
-                    Label("支出報告", systemImage: "chart.bar.fill")
-                }
-                
-                // MARK: Tab 5: 成員管理
-                MemberManagementView(members: $members, saveAction: saveMembers)
-                    .tabItem {
-                        Label("成員管理", systemImage: "person.3.fill")
-                    }
-            }
-            .tint(.indigo)
-        }
-        // MARK: - 資料持久化邏輯
-        
-        func loadAppointments() -> [Appointment] {
-            if let savedData = UserDefaults.standard.data(forKey: appointmentKey) {
-                if let decodedAppointments = try? JSONDecoder().decode([Appointment].self, from: savedData) {
-                    return decodedAppointments
-                }
-            }
-            return []
-        }
-        
-        func saveAppointments() {
-            if let encoded = try? JSONEncoder().encode(appointments) {
-                UserDefaults.standard.set(encoded, forKey: appointmentKey)
-            }
-        }
-        
-        func deleteAppointments(at offsets: IndexSet) {
-            let sortedAppointments = appointments.sorted(by: { $0.date < $1.date })
-            let appointmentsToDelete = offsets.map { sortedAppointments[$0] }
-            
-            for appointment in appointmentsToDelete {
-                if let index = appointments.firstIndex(where: { $0.id == appointment.id }) {
-                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [appointment.id.uuidString])
-                    appointments.remove(at: index)
-                }
-            }
-            saveAppointments()
-        }
-        
-        func loadMembers() -> [Member] {
-            if let savedData = UserDefaults.standard.data(forKey: memberKey) {
-                if let decodedMembers = try? JSONDecoder().decode([Member].self, from: savedData) {
-                    return decodedMembers.sorted { $0.name < $1.name }
-                }
-            }
-            return []
-        }
+}
 
-        func saveMembers() {
-            if let encoded = try? JSONEncoder().encode(members) {
-                UserDefaults.standard.set(encoded, forKey: memberKey)
+
+// MARK: - 主內容視圖 (Main Tab View Wrapper)
+
+/// **已移至頂層**：主內容視圖
+struct ContentView: View {
+    @State private var appointments: [Appointment] = []
+    @State private var members: [Member] = []
+    @State private var generalTransactions: [GeneralTransaction] = [] // 新增：日常交易
+    
+    
+    private let appointmentKey = "StoredAppointments"
+    private let memberKey = "StoredMembers"
+    private let transactionKey = "StoredGeneralTransactions" // 日常交易儲存鍵
+    
+    init() {
+        _appointments = State(initialValue: loadAppointments())
+        _members = State(initialValue: loadMembers())
+        _generalTransactions = State(initialValue: loadTransactions()) // 載入交易
+        requestNotificationPermission()
+    }
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("Notification permission granted.")
+            } else if let error = error {
+                print("Notification permission error: \(error.localizedDescription)")
+            } else {
+                print("Notification permission denied.")
             }
         }
-        
-        func loadTransactions() -> [GeneralTransaction] {
-            if let savedData = UserDefaults.standard.data(forKey: transactionKey) {
-                if let decodedTransactions = try? JSONDecoder().decode([GeneralTransaction].self, from: savedData) {
-                    return decodedTransactions
+    }
+    var body: some View {
+        TabView {
+            // MARK: Tab 1: 預約列表
+            AppointmentListView(
+                appointments: $appointments,
+                members: members,
+                saveAction: saveAppointments,
+                deleteAction: deleteAppointments
+            )
+            .tabItem {
+                Label("預約列表", systemImage: "list.bullet.clipboard")
+            }
+            
+            // MARK: Tab 2: 預約歷史
+            HistoryView(appointments: appointments)
+                .tabItem {
+                    Label("預約歷史", systemImage: "clock.fill")
                 }
+            
+            // MARK: Tab 3: 收入/支出 (新增)
+            IncomeExpenseView(
+                appointments: appointments,
+                generalTransactions: $generalTransactions,
+                members: members,
+                saveAction: saveTransactions
+            )
+            .tabItem {
+                Label("收入/支出", systemImage: "dollarsign.circle.fill")
             }
-            return []
-        }
-        
-        func saveTransactions() {
-            if let encoded = try? JSONEncoder().encode(generalTransactions) {
-                UserDefaults.standard.set(encoded, forKey: transactionKey)
+            
+            // MARK: Tab 4: 支出報告
+            ReportView(
+                appointments: appointments,
+                generalTransactions: generalTransactions,
+                members: members
+            )
+            .tabItem {
+                Label("支出報告", systemImage: "chart.bar.fill")
             }
-        }
-        // MARK: - 9. App 結構 (App Structure)
-        @main
-        struct AppointmentSystemApp: App {
-            var body: some Scene {
-                WindowGroup {
-                    ContentView()
+            
+            // MARK: Tab 5: 成員管理
+            MemberManagementView(members: $members, saveAction: saveMembers)
+                .tabItem {
+                    Label("成員管理", systemImage: "person.3.fill")
                 }
+        }
+        .tint(.indigo)
+    }
+    
+    // MARK: - 資料持久化邏輯
+    
+    func loadAppointments() -> [Appointment] {
+        if let savedData = UserDefaults.standard.data(forKey: appointmentKey) {
+            if let decodedAppointments = try? JSONDecoder().decode([Appointment].self, from: savedData) {
+                return decodedAppointments
             }
         }
+        return []
+    }
+    
+    func saveAppointments() {
+        if let encoded = try? JSONEncoder().encode(appointments) {
+            UserDefaults.standard.set(encoded, forKey: appointmentKey)
+        }
+    }
+    
+    func deleteAppointments(at offsets: IndexSet) {
+        let sortedAppointments = appointments.sorted(by: { $0.date < $1.date })
+        let appointmentsToDelete = offsets.map { sortedAppointments[$0] }
         
+        for appointment in appointmentsToDelete {
+            if let index = appointments.firstIndex(where: { $0.id == appointment.id }) {
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [appointment.id.uuidString])
+                
+                appointments.remove(at: index)
+            }
+        }
+        saveAppointments()
+    }
+    
+    func loadMembers() -> [Member] {
+        if let savedData = UserDefaults.standard.data(forKey: memberKey) {
+            if let decodedMembers = try? JSONDecoder().decode([Member].self, from: savedData) {
+                return decodedMembers.sorted { $0.name < $1.name }
+            }
+        }
+        return []
+    }
+
+    func saveMembers() {
+        if let encoded = try? JSONEncoder().encode(members) {
+            UserDefaults.standard.set(encoded, forKey: memberKey)
+        }
+    }
+    
+    func loadTransactions() -> [GeneralTransaction] {
+        if let savedData = UserDefaults.standard.data(forKey: transactionKey) {
+            if let decodedTransactions = try? JSONDecoder().decode([GeneralTransaction].self, from: savedData) {
+                return decodedTransactions
+            }
+        }
+        return []
+    }
+    
+    func saveTransactions() {
+        if let encoded = try? JSONEncoder().encode(generalTransactions) {
+            UserDefaults.standard.set(encoded, forKey: transactionKey)
+        }
+    }
+}
+
+// MARK: - 9. App 結構 (App Structure)
+
+/// **已移至頂層**：App 結構
+@main
+struct AppointmentSystemApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
     }
 }

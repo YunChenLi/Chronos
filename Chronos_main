@@ -238,7 +238,7 @@ struct ProportionChart: View {
 
 // MARK: - 1. 預約列表視圖 (Appointment List View - Tab 1) Helper
 
-/// **已移至頂層**：預約列表的單元格視圖
+/// 預約列表的單元格視圖
 struct AppointmentRow: View {
     let appointment: Appointment
     let members: [Member]
@@ -309,7 +309,7 @@ struct AppointmentRow: View {
 }
 
 
-/// **已移至頂層**：預約列表視圖 (Tab 1)
+/// 預約列表視圖 (Tab 1)
 struct AppointmentListView: View {
     @Binding var appointments: [Appointment]
     let members: [Member]
@@ -317,6 +317,17 @@ struct AppointmentListView: View {
     var deleteAction: (IndexSet) -> Void
     
     @State private var isShowingAddAppointment = false
+    
+    // **修正 Type-Check 錯誤**：將複雜的 Binding 邏輯提取到獨立函式中
+    private func binding(for appointment: Appointment) -> Binding<Appointment>? {
+        guard let index = appointments.firstIndex(where: { $0.id == appointment.id }) else {
+            return nil
+        }
+        return Binding(
+            get: { self.appointments[index] },
+            set: { self.appointments[index] = $0 }
+        )
+    }
     
     var body: some View {
         NavigationView {
@@ -333,22 +344,15 @@ struct AppointmentListView: View {
                     List {
                         // 依據日期排序預約
                         ForEach(appointments.sorted(by: { $0.date < $1.date })) { appointment in
-                            
                             // 點擊後進入編輯頁面
-                            NavigationLink(destination: EditAppointmentView(
-                                // 確保 EditAppointmentView 接受一個 Appointment 的 Binding
-                                appointment: Binding(
-                                    get: { self.appointments.first(where: { $0.id == appointment.id })! },
-                                    set: { newValue in
-                                        if let index = self.appointments.firstIndex(where: { $0.id == newValue.id }) {
-                                            self.appointments[index] = newValue
-                                        }
-                                    }
-                                ),
-                                saveAction: saveAction
-                            )) {
-                                // **修正點**：使用我們新的 AppointmentRow 子 View
-                                AppointmentRow(appointment: appointment, members: members)
+                            if let appointmentBinding = binding(for: appointment) {
+                                NavigationLink(destination: EditAppointmentView(
+                                    // 使用提取後的簡化 Binding
+                                    appointment: appointmentBinding,
+                                    saveAction: saveAction
+                                )) {
+                                    AppointmentRow(appointment: appointment, members: members)
+                                }
                             }
                         }
                         .onDelete(perform: deleteAction)
@@ -356,6 +360,7 @@ struct AppointmentListView: View {
                     .listStyle(.insetGrouped)
                 }
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle("預約列表")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -381,7 +386,7 @@ struct AppointmentListView: View {
 
 // MARK: - 2. 預約歷史記錄視圖 (History View - Tab 2)
 
-/// **已移至頂層**：預約歷史記錄視圖 (Tab 2)
+/// 預約歷史記錄視圖 (Tab 2)
 struct HistoryView: View {
     let appointments: [Appointment]
 
@@ -455,6 +460,7 @@ struct HistoryView: View {
                     }
                 }
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle("預約歷史記錄")
         }
     }
@@ -462,7 +468,7 @@ struct HistoryView: View {
 
 // MARK: - 3. 收入/支出視圖 (Income Expense View - Tab 3)
 
-/// **已移至頂層**：收入/支出視圖 (Tab 3)
+/// 收入/支出視圖 (Tab 3)
 struct IncomeExpenseView: View {
     let appointments: [Appointment]
     @Binding var generalTransactions: [GeneralTransaction]
@@ -570,6 +576,7 @@ struct IncomeExpenseView: View {
                     .padding()
                 }
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle("收支月曆")
             .sheet(isPresented: $isAddingTransaction) {
                 AddGeneralTransactionView(
@@ -586,7 +593,7 @@ struct IncomeExpenseView: View {
 
 // MARK: - 4. 支出報告視圖 (Report View - Tab 4)
 
-/// **已移至頂層**：支出報告視圖 (Tab 4)
+/// 支出報告視圖 (Tab 4)
 struct ReportView: View {
     let appointments: [Appointment]
     let generalTransactions: [GeneralTransaction]
@@ -710,7 +717,7 @@ struct ReportView: View {
                                     case .member:
                                         return memberTotals.map { ($0.member, Double($0.total)) }
                                     case .month:
-                                        // **修正**：當選擇月份報告時，應使用 monthTotals
+                                        // 修正：當選擇月份報告時，應使用 monthTotals
                                         return monthTotals.map { ($0.month, Double($0.total)) }
                                     }
                                 }() // 括號表示立即執行這個閉包
@@ -779,6 +786,7 @@ struct ReportView: View {
                     }
                     .listStyle(.insetGrouped)
                 }
+                // 修正：navigationTitle 應用於 NavigationView 內部的 View
                 .navigationTitle("支出報告")
             }
         }
@@ -788,7 +796,7 @@ struct ReportView: View {
 
 // MARK: - 5. 成員管理視圖 (Member Management View - Tab 5)
 
-/// **已移至頂層**：成員管理視圖 (Tab 5)
+/// 成員管理視圖 (Tab 5)
 struct MemberManagementView: View {
     @Binding var members: [Member]
     var saveAction: () -> Void
@@ -856,6 +864,7 @@ struct MemberManagementView: View {
                     }
                 }
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle("成員管理")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -890,7 +899,7 @@ struct MemberManagementView: View {
 
 // MARK: - 6. 新增日常交易視圖 (Add General Transaction View)
 
-/// **已移至頂層**：新增日常交易視圖
+/// 新增日常交易視圖
 struct AddGeneralTransactionView: View {
     @Binding var generalTransactions: [GeneralTransaction]
     let members: [Member]
@@ -976,6 +985,7 @@ struct AddGeneralTransactionView: View {
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle(transactionType == .expense ? "新增日常支出" : "新增日常收入")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -1009,7 +1019,7 @@ struct AddGeneralTransactionView: View {
 
 // MARK: - 7. 編輯預約視圖 (Edit Appointment View)
 
-/// **已移至頂層**：編輯預約視圖
+/// 編輯預約視圖
 struct EditAppointmentView: View {
     @Binding var appointment: Appointment
     var saveAction: () -> Void
@@ -1136,6 +1146,7 @@ struct EditAppointmentView: View {
             .buttonStyle(.borderedProminent)
             .padding(.top)
         }
+        // 修正：navigationTitle 應用於 NavigationView 內部的 View
         .navigationTitle("編輯歷史記錄")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -1162,7 +1173,7 @@ struct EditAppointmentView: View {
 
 // MARK: - 8. 新增預約視圖 (Add Appointment View)
 
-/// **已移至頂層**：新增預約視圖
+/// 新增預約視圖
 struct AddAppointmentView: View {
     @Binding var appointments: [Appointment]
     let members: [Member]
@@ -1307,6 +1318,7 @@ struct AddAppointmentView: View {
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
             }
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View
             .navigationTitle("新增預約")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -1383,7 +1395,7 @@ struct AddAppointmentView: View {
                     event.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: appointment.date)!
                     var notes = "服務項目: \(appointment.service)\n預約者: \(appointment.name)"
                     if let detail = appointment.extraServiceDetail { notes += "\n額外服務: \(detail)" }
-                    // **修正**：修正金額的字串格式
+                    // 修正：修正金額的字串格式
                     if let amount = appointment.amount { notes += "\n消費金額: $\(String(format: "%.0f", amount))" }
                     if let photoDesc = appointment.photoDescription { notes += "\n照片備註: \(photoDesc)" }
                     if let email = appointment.email { notes += "\n郵件: \(email)" }
@@ -1414,7 +1426,7 @@ struct AddAppointmentView: View {
 
 // MARK: - 主內容視圖 (Main Tab View Wrapper)
 
-/// **已移至頂層**：主內容視圖
+/// 主內容視圖
 struct ContentView: View {
     @State private var appointments: [Appointment] = []
     @State private var members: [Member] = []
@@ -1471,6 +1483,7 @@ struct ContentView: View {
             )
             .tabItem {
                 Label("收入/支出", systemImage: "dollarsign.circle.fill")
+                
             }
             
             // MARK: Tab 4: 支出報告
@@ -1556,7 +1569,7 @@ struct ContentView: View {
 
 // MARK: - 9. App 結構 (App Structure)
 
-/// **已移至頂層**：App 結構
+/// App 結構
 @main
 struct AppointmentSystemApp: App {
     var body: some Scene {

@@ -318,7 +318,7 @@ struct AppointmentListView: View {
     
     @State private var isShowingAddAppointment = false
     
-    // **修正 Type-Check 錯誤**：將複雜的 Binding 邏輯提取到獨立函式中
+    // 修正 Type-Check 錯誤：將複雜的 Binding 邏輯提取到獨立函式中
     private func binding(for appointment: Appointment) -> Binding<Appointment>? {
         guard let index = appointments.firstIndex(where: { $0.id == appointment.id }) else {
             return nil

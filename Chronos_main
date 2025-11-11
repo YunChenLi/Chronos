@@ -360,7 +360,7 @@ struct AppointmentListView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (VStack)
             .navigationTitle("預約列表")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -460,7 +460,7 @@ struct HistoryView: View {
                     }
                 }
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (List)
             .navigationTitle("預約歷史記錄")
         }
     }
@@ -576,7 +576,7 @@ struct IncomeExpenseView: View {
                     .padding()
                 }
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (VStack)
             .navigationTitle("收支月曆")
             .sheet(isPresented: $isAddingTransaction) {
                 AddGeneralTransactionView(
@@ -786,7 +786,7 @@ struct ReportView: View {
                     }
                     .listStyle(.insetGrouped)
                 }
-                // 修正：navigationTitle 應用於 NavigationView 內部的 View
+                // 修正：navigationTitle 應用於 NavigationView 內部的 View (VStack)
                 .navigationTitle("支出報告")
             }
         }
@@ -864,7 +864,7 @@ struct MemberManagementView: View {
                     }
                 }
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (VStack)
             .navigationTitle("成員管理")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -985,7 +985,7 @@ struct AddGeneralTransactionView: View {
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (Form)
             .navigationTitle(transactionType == .expense ? "新增日常支出" : "新增日常收入")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -1146,7 +1146,8 @@ struct EditAppointmentView: View {
             .buttonStyle(.borderedProminent)
             .padding(.top)
         }
-        // 修正：navigationTitle 應用於 NavigationView 內部的 View
+        // 修正：因為 EditAppointmentView 作為 NavigationLink 的目的地，
+        // navigationTitle 必須應用到最外層的 View (Form)
         .navigationTitle("編輯歷史記錄")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -1318,7 +1319,7 @@ struct AddAppointmentView: View {
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
             }
-            // 修正：navigationTitle 應用於 NavigationView 內部的 View
+            // 修正：navigationTitle 應用於 NavigationView 內部的 View (Form)
             .navigationTitle("新增預約")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

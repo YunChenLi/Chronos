@@ -1,6 +1,6 @@
 //
-//  ChronosApp.swift
-//  Chronos
+//  KinKeepApp.swift
+//  KinKeep
 //
 //  Created by 李芸禎 on 2025/11/2.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 //@main
-struct ChronosApp: App {
+struct KinKeepApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

@@ -1,13 +1,13 @@
 //
-//  ChronosUITests.swift
-//  ChronosUITests
+//  KinKeepApp.swift
+//  KinKeep
 //
 //  Created by 李芸禎 on 2025/11/2.
 //
 
 import XCTest
 
-final class ChronosUITests: XCTestCase {
+final class KinKeepUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

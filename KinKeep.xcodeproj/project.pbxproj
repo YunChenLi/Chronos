@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
@@ -24,28 +24,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		584A4F662EB6F563002C5A4B /* Chronos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chronos.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		584A4F772EB6F565002C5A4B /* ChronosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F662EB6F563002C5A4B /* KinKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KinKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		584A4F892EB6F565002C5A4B /* Exceptions for "Chronos" folder in "Chronos" target */ = {
+		584A4F892EB6F565002C5A4B /* Exceptions for "Kinkeep" folder in "KinKeep" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 584A4F652EB6F563002C5A4B /* Chronos */;
+			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		584A4F682EB6F563002C5A4B /* Chronos */ = {
+		584A4F682EB6F563002C5A4B /* Kinkeep */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				584A4F892EB6F565002C5A4B /* Exceptions for "Chronos" folder in "Chronos" target */,
+				584A4F892EB6F565002C5A4B /* Exceptions for "Kinkeep" folder in "KinKeep" target */,
 			);
-			path = Chronos;
+			path = Kinkeep;
 			sourceTree = "<group>";
 		};
 		584A4F7A2EB6F565002C5A4B /* ChronosTests */ = {
@@ -63,24 +63,18 @@
 /* Begin PBXFrameworksBuildPhase section */
 		584A4F632EB6F563002C5A4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F742EB6F565002C5A4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F7E2EB6F565002C5A4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -88,7 +82,7 @@
 		584A4F5D2EB6F563002C5A4B = {
 			isa = PBXGroup;
 			children = (
-				584A4F682EB6F563002C5A4B /* Chronos */,
+				584A4F682EB6F563002C5A4B /* Kinkeep */,
 				584A4F7A2EB6F565002C5A4B /* ChronosTests */,
 				584A4F842EB6F565002C5A4B /* ChronosUITests */,
 				584A4F672EB6F563002C5A4B /* Products */,
@@ -98,9 +92,9 @@
 		584A4F672EB6F563002C5A4B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				584A4F662EB6F563002C5A4B /* Chronos.app */,
-				584A4F772EB6F565002C5A4B /* ChronosTests.xctest */,
-				584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */,
+				584A4F662EB6F563002C5A4B /* KinKeep.app */,
+				584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */,
+				584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +102,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		584A4F652EB6F563002C5A4B /* Chronos */ = {
+		584A4F652EB6F563002C5A4B /* KinKeep */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "Chronos" */;
+			buildConfigurationList = 584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeep" */;
 			buildPhases = (
 				584A4F622EB6F563002C5A4B /* Sources */,
 				584A4F632EB6F563002C5A4B /* Frameworks */,
@@ -118,21 +112,17 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
-				584A4F682EB6F563002C5A4B /* Chronos */,
+				584A4F682EB6F563002C5A4B /* Kinkeep */,
 			);
-			name = Chronos;
-			packageProductDependencies = (
-			);
+			name = KinKeep;
 			productName = Chronos;
-			productReference = 584A4F662EB6F563002C5A4B /* Chronos.app */;
+			productReference = 584A4F662EB6F563002C5A4B /* KinKeep.app */;
 			productType = "com.apple.product-type.application";
 		};
-		584A4F762EB6F565002C5A4B /* ChronosTests */ = {
+		584A4F762EB6F565002C5A4B /* KinKeepTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosTests" */;
+			buildConfigurationList = 584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepTests" */;
 			buildPhases = (
 				584A4F732EB6F565002C5A4B /* Sources */,
 				584A4F742EB6F565002C5A4B /* Frameworks */,
@@ -146,16 +136,14 @@
 			fileSystemSynchronizedGroups = (
 				584A4F7A2EB6F565002C5A4B /* ChronosTests */,
 			);
-			name = ChronosTests;
-			packageProductDependencies = (
-			);
+			name = KinKeepTests;
 			productName = ChronosTests;
-			productReference = 584A4F772EB6F565002C5A4B /* ChronosTests.xctest */;
+			productReference = 584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		584A4F802EB6F565002C5A4B /* ChronosUITests */ = {
+		584A4F802EB6F565002C5A4B /* KinKeepUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosUITests" */;
+			buildConfigurationList = 584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepUITests" */;
 			buildPhases = (
 				584A4F7D2EB6F565002C5A4B /* Sources */,
 				584A4F7E2EB6F565002C5A4B /* Frameworks */,
@@ -169,11 +157,9 @@
 			fileSystemSynchronizedGroups = (
 				584A4F842EB6F565002C5A4B /* ChronosUITests */,
 			);
-			name = ChronosUITests;
-			packageProductDependencies = (
-			);
+			name = KinKeepUITests;
 			productName = ChronosUITests;
-			productReference = 584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */;
+			productReference = 584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -183,6 +169,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
@@ -199,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "Chronos" */;
+			buildConfigurationList = 584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "KinKeep" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -208,14 +197,14 @@
 			);
 			mainGroup = 584A4F5D2EB6F563002C5A4B;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 584A4F672EB6F563002C5A4B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				584A4F652EB6F563002C5A4B /* Chronos */,
-				584A4F762EB6F565002C5A4B /* ChronosTests */,
-				584A4F802EB6F565002C5A4B /* ChronosUITests */,
+				584A4F652EB6F563002C5A4B /* KinKeep */,
+				584A4F762EB6F565002C5A4B /* KinKeepTests */,
+				584A4F802EB6F565002C5A4B /* KinKeepUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -223,80 +212,82 @@
 /* Begin PBXResourcesBuildPhase section */
 		584A4F642EB6F563002C5A4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F752EB6F565002C5A4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F7F2EB6F565002C5A4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		584A4F622EB6F563002C5A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F732EB6F565002C5A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		584A4F7D2EB6F565002C5A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		584A4F792EB6F565002C5A4B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 584A4F652EB6F563002C5A4B /* Chronos */;
+			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
 			targetProxy = 584A4F782EB6F565002C5A4B /* PBXContainerItemProxy */;
 		};
 		584A4F832EB6F565002C5A4B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 584A4F652EB6F563002C5A4B /* Chronos */;
+			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
 			targetProxy = 584A4F822EB6F565002C5A4B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		584A4F8B2EB6F565002C5A4B /* Debug */ = {
+		584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeep" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PS98V4XU8Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
+				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
+				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Chronos/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_FILE = KinKeep/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -312,9 +303,16 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.Chronos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.KinKeep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = YES;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -328,21 +326,35 @@
 			};
 			name = Debug;
 		};
-		584A4F8C2EB6F565002C5A4B /* Release */ = {
+		584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeep" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PS98V4XU8Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
+				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
+				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Chronos/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_FILE = KinKeep/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -358,9 +370,16 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.Chronos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.KinKeep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = YES;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -374,7 +393,7 @@
 			};
 			name = Release;
 		};
-		584A4F8D2EB6F565002C5A4B /* Debug */ = {
+		584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "KinKeep" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -436,7 +455,7 @@
 			};
 			name = Debug;
 		};
-		584A4F8E2EB6F565002C5A4B /* Release */ = {
+		584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "KinKeep" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -490,7 +509,7 @@
 			};
 			name = Release;
 		};
-		584A4F902EB6F565002C5A4B /* Debug */ = {
+		584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -511,12 +530,12 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chronos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chronos";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KinKeep.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KinKeep";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
-		584A4F912EB6F565002C5A4B /* Release */ = {
+		584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -537,12 +556,12 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chronos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chronos";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KinKeep.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KinKeep";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
-		584A4F932EB6F565002C5A4B /* Debug */ = {
+		584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -567,7 +586,7 @@
 			};
 			name = Debug;
 		};
-		584A4F942EB6F565002C5A4B /* Release */ = {
+		584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -595,40 +614,36 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "Chronos" */ = {
+		584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "KinKeep" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F8D2EB6F565002C5A4B /* Debug */,
-				584A4F8E2EB6F565002C5A4B /* Release */,
+				584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "KinKeep" */,
+				584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "KinKeep" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "Chronos" */ = {
+		584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeep" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F8B2EB6F565002C5A4B /* Debug */,
-				584A4F8C2EB6F565002C5A4B /* Release */,
+				584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeep" */,
+				584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeep" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosTests" */ = {
+		584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F902EB6F565002C5A4B /* Debug */,
-				584A4F912EB6F565002C5A4B /* Release */,
+				584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepTests" */,
+				584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosUITests" */ = {
+		584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F932EB6F565002C5A4B /* Debug */,
-				584A4F942EB6F565002C5A4B /* Release */,
+				584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepUITests" */,
+				584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

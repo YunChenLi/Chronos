@@ -1,13 +1,13 @@
 //
-//  ChronosUITestsLaunchTests.swift
-//  ChronosUITests
+//  KinKeepUITestsLaunchTests.swift
+//  KinKeepUITests
 //
 //  Created by 李芸禎 on 2025/11/2.
 //
 
 import XCTest
 
-final class ChronosUITestsLaunchTests: XCTestCase {
+final class KinKeepUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

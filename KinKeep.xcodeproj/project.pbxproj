@@ -27,38 +27,26 @@
 		584A4F662EB6F563002C5A4B /* KinKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KinKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronosApp.swift; sourceTree = "<group>"; };
+		5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		5872A5502F80C62700FE6FA7 /* Appointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointment.swift; sourceTree = "<group>"; };
+		5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransaction.swift; sourceTree = "<group>"; };
+		5872A5522F80C62700FE6FA7 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
+		5872A5542F80C62700FE6FA7 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentView.swift; sourceTree = "<group>"; };
+		5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentListView.swift; sourceTree = "<group>"; };
+		5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAppointmentView.swift; sourceTree = "<group>"; };
+		5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarGridView.swift; sourceTree = "<group>"; };
+		5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionChart.swift; sourceTree = "<group>"; };
+		5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeneralTransactionView.swift; sourceTree = "<group>"; };
+		5872A55E2F80C62700FE6FA7 /* IncomeExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeExpenseView.swift; sourceTree = "<group>"; };
+		5872A55F2F80C62700FE6FA7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
+		5872A5612F80C62700FE6FA7 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManagementView.swift; sourceTree = "<group>"; };
+		5872A5652F80C62700FE6FA7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5872A5672F80C62700FE6FA7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		5872A5682F80C62700FE6FA7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		584A4F892EB6F565002C5A4B /* Exceptions for "Kinkeep" folder in "KinKeep" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		584A4F682EB6F563002C5A4B /* Kinkeep */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				584A4F892EB6F565002C5A4B /* Exceptions for "Kinkeep" folder in "KinKeep" target */,
-			);
-			path = Kinkeep;
-			sourceTree = "<group>";
-		};
-		584A4F7A2EB6F565002C5A4B /* ChronosTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChronosTests;
-			sourceTree = "<group>";
-		};
-		584A4F842EB6F565002C5A4B /* ChronosUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChronosUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		584A4F632EB6F563002C5A4B /* Frameworks */ = {
@@ -82,9 +70,7 @@
 		584A4F5D2EB6F563002C5A4B = {
 			isa = PBXGroup;
 			children = (
-				584A4F682EB6F563002C5A4B /* Kinkeep */,
-				584A4F7A2EB6F565002C5A4B /* ChronosTests */,
-				584A4F842EB6F565002C5A4B /* ChronosUITests */,
+				5872A5692F80C62700FE6FA7 /* Chronos */,
 				584A4F672EB6F563002C5A4B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,6 +85,112 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5872A54D2F80C62700FE6FA7 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5872A54F2F80C62700FE6FA7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5872A5532F80C62700FE6FA7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5502F80C62700FE6FA7 /* Appointment.swift */,
+				5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */,
+				5872A5522F80C62700FE6FA7 /* Member.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5872A5552F80C62700FE6FA7 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		5872A5592F80C62700FE6FA7 /* Appointment */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */,
+				5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */,
+				5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */,
+			);
+			path = Appointment;
+			sourceTree = "<group>";
+		};
+		5872A55C2F80C62700FE6FA7 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */,
+				5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5872A5602F80C62700FE6FA7 /* Finance */ = {
+			isa = PBXGroup;
+			children = (
+				5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */,
+				5872A55E2F80C62700FE6FA7 /* IncomeExpenseView.swift */,
+				5872A55F2F80C62700FE6FA7 /* ReportView.swift */,
+			);
+			path = Finance;
+			sourceTree = "<group>";
+		};
+		5872A5622F80C62700FE6FA7 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5612F80C62700FE6FA7 /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		5872A5642F80C62700FE6FA7 /* Member */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */,
+			);
+			path = Member;
+			sourceTree = "<group>";
+		};
+		5872A5662F80C62700FE6FA7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5872A5592F80C62700FE6FA7 /* Appointment */,
+				5872A55C2F80C62700FE6FA7 /* Components */,
+				5872A5602F80C62700FE6FA7 /* Finance */,
+				5872A5622F80C62700FE6FA7 /* History */,
+				5872A5642F80C62700FE6FA7 /* Member */,
+				5872A5652F80C62700FE6FA7 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5872A5692F80C62700FE6FA7 /* Chronos */ = {
+			isa = PBXGroup;
+			children = (
+				5872A54D2F80C62700FE6FA7 /* App */,
+				5872A54F2F80C62700FE6FA7 /* Extensions */,
+				5872A5532F80C62700FE6FA7 /* Models */,
+				5872A5552F80C62700FE6FA7 /* Persistence */,
+				5872A5662F80C62700FE6FA7 /* Views */,
+				5872A5672F80C62700FE6FA7 /* .gitignore */,
+				5872A5682F80C62700FE6FA7 /* README.md */,
+			);
+			path = Chronos;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -111,9 +203,6 @@
 				584A4F642EB6F563002C5A4B /* Resources */,
 			);
 			buildRules = (
-			);
-			fileSystemSynchronizedGroups = (
-				584A4F682EB6F563002C5A4B /* Kinkeep */,
 			);
 			name = KinKeep;
 			productName = Chronos;
@@ -133,9 +222,6 @@
 			dependencies = (
 				584A4F792EB6F565002C5A4B /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				584A4F7A2EB6F565002C5A4B /* ChronosTests */,
-			);
 			name = KinKeepTests;
 			productName = ChronosTests;
 			productReference = 584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */;
@@ -153,9 +239,6 @@
 			);
 			dependencies = (
 				584A4F832EB6F565002C5A4B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				584A4F842EB6F565002C5A4B /* ChronosUITests */,
 			);
 			name = KinKeepUITests;
 			productName = ChronosUITests;
@@ -296,8 +379,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -363,8 +446,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

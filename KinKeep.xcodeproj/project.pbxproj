@@ -6,6 +6,27 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */; };
+		5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */; };
+		5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5502F80C62700FE6FA7 /* Appointment.swift */; };
+		5874B5C42F80D3EF003AE4E8 /* GeneralTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */; };
+		5874B5C52F80D3F3003AE4E8 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5522F80C62700FE6FA7 /* Member.swift */; };
+		5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5542F80C62700FE6FA7 /* DataManager.swift */; };
+		5874B5C72F80D3FD003AE4E8 /* AddAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */; };
+		5874B5C82F80D401003AE4E8 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */; };
+		5874B5C92F80D406003AE4E8 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */; };
+		5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */; };
+		5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */; };
+		5874B5CC2F80D411003AE4E8 /* AddGeneralTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */; };
+		5874B5CD2F80D414003AE4E8 /* IncomeExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55E2F80C62700FE6FA7 /* IncomeExpenseView.swift */; };
+		5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55F2F80C62700FE6FA7 /* ReportView.swift */; };
+		5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5612F80C62700FE6FA7 /* HistoryView.swift */; };
+		5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */; };
+		5874B5D12F80D421003AE4E8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5652F80C62700FE6FA7 /* ContentView.swift */; };
+		58CB6CAA2F8252AF002310E9 /* NotificationManager 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		584A4F782EB6F565002C5A4B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -46,6 +67,7 @@
 		5872A5652F80C62700FE6FA7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5872A5672F80C62700FE6FA7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5872A5682F80C62700FE6FA7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationManager 2.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
+				58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -314,6 +337,24 @@
 		584A4F622EB6F563002C5A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
+				5874B5C72F80D3FD003AE4E8 /* AddAppointmentView.swift in Sources */,
+				5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */,
+				5874B5C82F80D401003AE4E8 /* AppointmentListView.swift in Sources */,
+				5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */,
+				58CB6CAA2F8252AF002310E9 /* NotificationManager 2.swift in Sources */,
+				5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */,
+				5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */,
+				5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */,
+				5874B5D12F80D421003AE4E8 /* ContentView.swift in Sources */,
+				5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */,
+				5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */,
+				5874B5C42F80D3EF003AE4E8 /* GeneralTransaction.swift in Sources */,
+				5874B5C92F80D406003AE4E8 /* EditAppointmentView.swift in Sources */,
+				5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */,
+				5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */,
+				5874B5CC2F80D411003AE4E8 /* AddGeneralTransactionView.swift in Sources */,
+				5874B5CD2F80D414003AE4E8 /* IncomeExpenseView.swift in Sources */,
+				5874B5C52F80D3F3003AE4E8 /* Member.swift in Sources */,
 			);
 		};
 		584A4F732EB6F565002C5A4B /* Sources */ = {
@@ -369,7 +410,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KinKeep/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -379,12 +420,11 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.KinKeep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -398,13 +438,14 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
@@ -436,7 +477,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KinKeep/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -446,12 +487,11 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tifli.KinKeep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -465,13 +505,14 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;

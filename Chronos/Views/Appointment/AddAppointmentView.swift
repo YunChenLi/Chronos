@@ -44,6 +44,8 @@ struct AddAppointmentView: View {
     @State private var amountInput: String = ""
     @State private var photoDescription: String = ""
     @State private var extraServiceDetail: String = ""
+    // 🆕 提醒選項（預設勾選 30 分鐘）
+    @State private var selectedReminders: Set<ReminderOption> = [.thirtyMin]
 
     var finalName: String {
         if nameSource == .manual {
@@ -137,6 +139,34 @@ struct AddAppointmentView: View {
                         .frame(height: 100)
                 }
 
+                // 🆕 MARK: 提醒設定
+                Section("提醒設定") {
+                    ForEach(ReminderOption.allCases) { option in
+                        HStack {
+                            Image(systemName: option.icon)
+                                .foregroundColor(.indigo)
+                                .frame(width: 24)
+                            Text(option.rawValue)
+                            Spacer()
+                            if selectedReminders.contains(option) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.indigo)
+                            } else {
+                                Image(systemName: "circle")
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if selectedReminders.contains(option) {
+                                selectedReminders.remove(option)
+                            } else {
+                                selectedReminders.insert(option)
+                            }
+                        }
+                    }
+                }
+
                 Button("儲存預約，並設定本地提醒") {
                     saveAppointment()
                 }
@@ -175,43 +205,15 @@ struct AddAppointmentView: View {
             amount: parsedAmount,
             photoDescription: trimmedPhotoDesc.isEmpty ? nil : trimmedPhotoDesc,
             isPhotoAttached: false,
-            extraServiceDetail: trimmedDetail
+            extraServiceDetail: trimmedDetail,
+            reminderOptions: Array(selectedReminders)
         )
 
         appointments.append(newAppointment)
         saveAction()
-        scheduleLocalNotification(appointment: newAppointment)
+        // 🆕 使用新的多重提醒管理器
+        NotificationManager.scheduleReminders(for: newAppointment, options: Array(selectedReminders))
         addEventToCalendar(appointment: newAppointment)
-    }
-
-    // MARK: - 本地通知
-
-    func scheduleLocalNotification(appointment: Appointment) {
-        let center = UNUserNotificationCenter.current()
-        guard let reminderDate = Calendar.current.date(byAdding: .minute, value: -30, to: appointment.date) else { return }
-        guard reminderDate > Date() else { return }
-
-        let content = UNMutableNotificationContent()
-        content.title = "⏰ 預約提醒：服務將於 30 分鐘後開始"
-        content.body = "客戶：\(appointment.name)；服務：\(appointment.service)。請準時準備。"
-        content.sound = UNNotificationSound.default
-
-        let triggerDateComponents = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute],
-            from: reminderDate
-        )
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
-        let request = UNNotificationRequest(
-            identifier: appointment.id.uuidString,
-            content: content,
-            trigger: trigger
-        )
-
-        center.add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error.localizedDescription)")
-            }
-        }
     }
 
     // MARK: - 日曆同步

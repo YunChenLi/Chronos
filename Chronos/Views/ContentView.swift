@@ -16,19 +16,7 @@ struct ContentView: View {
         _appointments = State(initialValue: DataManager.loadAppointments())
         _members = State(initialValue: DataManager.loadMembers())
         _generalTransactions = State(initialValue: DataManager.loadTransactions())
-        requestNotificationPermission()
-    }
-
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("Notification permission granted.")
-            } else if let error = error {
-                print("Notification permission error: \(error.localizedDescription)")
-            } else {
-                print("Notification permission denied.")
-            }
-        }
+        NotificationManager.requestPermission()
     }
 
     var body: some View {
@@ -92,9 +80,8 @@ struct ContentView: View {
 
         for appointment in appointmentsToDelete {
             if let index = appointments.firstIndex(where: { $0.id == appointment.id }) {
-                UNUserNotificationCenter.current().removePendingNotificationRequests(
-                    withIdentifiers: [appointment.id.uuidString]
-                )
+                // 🆕 使用 NotificationManager 取消所有提醒
+                NotificationManager.cancelReminders(for: appointment)
                 appointments.remove(at: index)
             }
         }

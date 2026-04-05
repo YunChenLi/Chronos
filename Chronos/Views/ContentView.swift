@@ -6,8 +6,6 @@
 internal import SwiftUI
 import UserNotifications
 
-@MainActor
-
 /// 主內容視圖（TabView 入口）
 struct ContentView: View {
     @State private var appointments: [Appointment] = []
@@ -36,9 +34,9 @@ struct ContentView: View {
 
             // Tab 2: 預約歷史
             HistoryView(appointments: appointments)
-                  .tabItem {
-                      Label("預約歷史", systemImage: "clock.fill")
-                  }
+                .tabItem {
+                    Label("預約歷史", systemImage: "clock.fill")
+                }
 
             // Tab 3: 收入/支出
             IncomeExpenseView(
@@ -65,6 +63,12 @@ struct ContentView: View {
             MemberManagementView(members: $members, saveAction: saveMembers)
                 .tabItem {
                     Label("成員管理", systemImage: "person.3.fill")
+                }
+
+            // Tab 6: 設定（含生活型態）
+            SettingsView()
+                .tabItem {
+                    Label("設定", systemImage: "gearshape.fill")
                 }
         }
         .tint(.indigo)

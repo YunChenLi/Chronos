@@ -5,7 +5,7 @@
 
 internal import SwiftUI
 
-/// 新增日常交易視圖（含類別、發票載具）
+/// 新增日常交易視圖（含生活型態類別、發票載具）
 struct AddGeneralTransactionView: View {
     @Binding var generalTransactions: [GeneralTransaction]
     let members: [Member]
@@ -13,7 +13,7 @@ struct AddGeneralTransactionView: View {
     let initialDate: Date
 
     @Environment(\.dismiss) var dismiss
-    @StateObject private var categoryManager = CategoryManager.shared
+    @StateObject private var lifestyleManager = LifestyleManager.shared
 
     @State private var amountInput: String = ""
     @State private var transactionDate: Date
@@ -21,14 +21,17 @@ struct AddGeneralTransactionView: View {
     @State private var description: String = ""
     @State private var transactionType: GeneralTransaction.TransactionType = .expense
 
-    // 🆕 類別
-    @State private var selectedCategory: String = TransactionCategory.expenseCategories.first ?? "📋 其他"
-    @State private var isAddingCustomCategory = false
-    @State private var newCategoryInput: String = ""
+    // 🆕 二層類別
+    @State private var selectedMainCategory: String = ""
+    @State private var selectedSubCategory: String = ""
 
     // 🆕 發票
     @State private var carrierCode: String = ""
     @State private var invoiceImageData: Data? = nil
+
+    // 自訂類別
+    @State private var isAddingCustomCategory = false
+    @State private var newCategoryInput: String = ""
 
     init(
         generalTransactions: Binding<[GeneralTransaction]>,
@@ -44,16 +47,32 @@ struct AddGeneralTransactionView: View {
         self._selectedMember = State(initialValue: members.first)
     }
 
-    var currentCategories: [String] {
+    // 目前的主類別列表（依收支類型切換）
+    var mainCategories: [String] {
         transactionType == .expense
-            ? categoryManager.allExpenseCategories
-            : categoryManager.allIncomeCategories
+            ? LifestyleManager.shared.mainCategories
+            : LifestyleManager.shared.incomeCategories
+    }
+
+    // 目前的子類別列表
+    var subCategories: [String] {
+        transactionType == .expense
+            ? lifestyleManager.getSubCategories(for: selectedMainCategory)
+            : [] // 收入類別不需要子類別
+    }
+
+    // 最終類別字串（用於儲存）
+    var finalCategory: String {
+        if transactionType == .income {
+            return selectedMainCategory
+        }
+        return selectedSubCategory.isEmpty
+            ? selectedMainCategory
+            : "\(selectedMainCategory) · \(selectedSubCategory)"
     }
 
     var isSaveDisabled: Bool {
-        let emptyAmount = amountInput.isEmpty
-        let noMember = (selectedMember == nil)
-        return emptyAmount || noMember
+        amountInput.isEmpty || selectedMember == nil || selectedMainCategory.isEmpty
     }
 
     var body: some View {
@@ -62,15 +81,13 @@ struct AddGeneralTransactionView: View {
                 // MARK: 收支類型
                 Section {
                     Picker("類型", selection: $transactionType) {
-                        Text("💸 支出").tag(GeneralTransaction.TransactionType.expense as GeneralTransaction.TransactionType)
-                        Text("💰 收入").tag(GeneralTransaction.TransactionType.income as GeneralTransaction.TransactionType)
+                        Text("💸 支出").tag(GeneralTransaction.TransactionType.expense)
+                        Text("💰 收入").tag(GeneralTransaction.TransactionType.income)
                     }
                     .pickerStyle(.segmented)
-                    .onChange(of: transactionType) { _, newType in
-                        // 切換類型時重設類別
-                        selectedCategory = newType == .expense
-                            ? (categoryManager.allExpenseCategories.first ?? "📋 其他")
-                            : (categoryManager.allIncomeCategories.first ?? "📋 其他")
+                    .onChange(of: transactionType) { _, _ in
+                        selectedMainCategory = mainCategories.first ?? ""
+                        selectedSubCategory = ""
                     }
                 }
 
@@ -81,14 +98,12 @@ struct AddGeneralTransactionView: View {
 
                     if !members.isEmpty {
                         Picker("歸屬成員", selection: $selectedMember) {
-                            ForEach(members, id: \.self) { (member: Member) in
+                            ForEach(members, id: \.self) { member in
                                 HStack {
-                                    Circle()
-                                        .fill(Color(hex: member.colorHex))
-                                        .frame(width: 10, height: 10)
+                                    Circle().fill(Color(hex: member.colorHex)).frame(width: 10, height: 10)
                                     Text(member.name)
                                 }
-                                .tag(Optional<Member>(member))
+                                .tag(Optional(member))
                             }
                         }
                     } else {
@@ -105,89 +120,103 @@ struct AddGeneralTransactionView: View {
                     }
                 }
 
-                // MARK: 🆕 類別選擇
-                Section("類別") {
-                    // 類別捲動選擇
+                // MARK: 🆕 主類別選擇
+                Section(transactionType == .expense ? "支出主類別" : "收入類別") {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
-                            ForEach(currentCategories, id: \.self) { (category: String) in
-                                let isSelected = (selectedCategory == category)
-                                let isExpense = (transactionType == .expense)
-                                let bgColor: Color = {
-                                    if isSelected { return isExpense ? Color.red.opacity(0.15) : Color.green.opacity(0.15) }
-                                    return Color.gray.opacity(0.1)
-                                }()
-                                let fgColor: Color = {
-                                    if isSelected { return isExpense ? .red : .green }
-                                    return .primary
-                                }()
-                                let strokeColor: Color = isSelected ? (isExpense ? .red : .green) : .clear
-
-                                Text(category)
-                                    .font(.subheadline)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(bgColor)
-                                    .foregroundColor(fgColor)
+                            ForEach(mainCategories, id: \.self) { cat in
+                                Text(cat)
+                                    .font(.subheadline).fontWeight(.medium)
+                                    .padding(.horizontal, 14).padding(.vertical, 8)
+                                    .background(
+                                        selectedMainCategory == cat
+                                            ? (transactionType == .expense ? Color.red.opacity(0.15) : Color.green.opacity(0.15))
+                                            : Color.gray.opacity(0.1)
+                                    )
+                                    .foregroundColor(
+                                        selectedMainCategory == cat
+                                            ? (transactionType == .expense ? .red : .green)
+                                            : .primary
+                                    )
                                     .cornerRadius(20)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 20)
-                                            .stroke(strokeColor, lineWidth: 1.5)
+                                            .stroke(
+                                                selectedMainCategory == cat
+                                                    ? (transactionType == .expense ? Color.red : Color.green)
+                                                    : Color.clear,
+                                                lineWidth: 1.5
+                                            )
                                     )
-                                    .onTapGesture { selectedCategory = category }
-                            }
-
-                            // 新增自訂類別按鈕
-                            Button {
-                                isAddingCustomCategory = true
-                            } label: {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("自訂")
-                                }
-                                .font(.subheadline)
-                                .padding(.horizontal, 12).padding(.vertical, 6)
-                                .background(Color.indigo.opacity(0.1))
-                                .foregroundColor(.indigo)
-                                .cornerRadius(20)
+                                    .onTapGesture {
+                                        selectedMainCategory = cat
+                                        selectedSubCategory = lifestyleManager.getSubCategories(for: cat).first ?? ""
+                                    }
                             }
                         }
                         .padding(.vertical, 4)
                     }
                     .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+                }
 
-                    // 已選類別顯示
-                    HStack {
-                        Text("已選：")
-                            .font(.caption).foregroundColor(.secondary)
-                        Text(selectedCategory)
-                            .font(.caption).fontWeight(.medium)
+                // MARK: 🆕 子類別選擇（僅支出有）
+                if transactionType == .expense && !subCategories.isEmpty {
+                    Section("支出子類別") {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(subCategories, id: \.self) { sub in
+                                    Text(sub)
+                                        .font(.caption).fontWeight(.medium)
+                                        .padding(.horizontal, 12).padding(.vertical, 6)
+                                        .background(
+                                            selectedSubCategory == sub
+                                                ? Color.indigo.opacity(0.15)
+                                                : Color.gray.opacity(0.1)
+                                        )
+                                        .foregroundColor(selectedSubCategory == sub ? .indigo : .secondary)
+                                        .cornerRadius(16)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .stroke(selectedSubCategory == sub ? Color.indigo : Color.clear, lineWidth: 1)
+                                        )
+                                        .onTapGesture { selectedSubCategory = sub }
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+
+                        // 已選顯示
+                        if !selectedSubCategory.isEmpty {
+                            HStack {
+                                Image(systemName: "tag.fill").foregroundColor(.indigo).font(.caption)
+                                Text("\(selectedMainCategory) · \(selectedSubCategory)")
+                                    .font(.caption).foregroundColor(.indigo)
+                            }
+                        }
                     }
                 }
 
                 // MARK: 說明備註
                 Section("說明／備註 (選填)") {
                     TextEditor(text: $description)
-                        .frame(height: 80)
+                        .frame(height: 70)
                         .overlay(
                             Text(description.isEmpty ? "輸入說明或備註..." : "")
-                                .foregroundColor(.secondary)
-                                .allowsHitTesting(false)
+                                .foregroundColor(.secondary).allowsHitTesting(false)
                                 .padding(.top, 8).padding(.leading, 5),
                             alignment: .topLeading
                         )
                 }
 
-                // MARK: 🆕 雲端發票載具
+                // MARK: 雲端發票載具
                 InvoiceSection(carrierCode: $carrierCode, invoiceImageData: $invoiceImageData)
 
                 // MARK: 儲存
-                Button("儲存交易記錄") {
-                    saveTransaction()
-                }
-                .disabled(isSaveDisabled)
-                .frame(maxWidth: .infinity)
-                .buttonStyle(.borderedProminent)
+                Button("儲存交易記錄") { saveTransaction() }
+                    .disabled(isSaveDisabled)
+                    .frame(maxWidth: .infinity)
+                    .buttonStyle(.borderedProminent)
             }
             .navigationTitle(transactionType == .expense ? "新增支出" : "新增收入")
             .toolbar {
@@ -195,24 +224,11 @@ struct AddGeneralTransactionView: View {
                     Button("取消") { dismiss() }
                 }
             }
-            // 自訂類別 Alert
-            .alert("新增自訂類別", isPresented: $isAddingCustomCategory) {
-                TextField("輸入類別名稱（含 Emoji）", text: $newCategoryInput)
-                Button("新增") {
-                    let name = newCategoryInput
-                    if !name.isEmpty {
-                        if transactionType == .expense {
-                            categoryManager.addExpenseCategory(name)
-                        } else {
-                            categoryManager.addIncomeCategory(name)
-                        }
-                        selectedCategory = name
-                    }
-                    newCategoryInput = ""
+            .onAppear {
+                if selectedMainCategory.isEmpty {
+                    selectedMainCategory = mainCategories.first ?? ""
+                    selectedSubCategory = lifestyleManager.getSubCategories(for: selectedMainCategory).first ?? ""
                 }
-                Button("取消", role: .cancel) { newCategoryInput = "" }
-            } message: {
-                Text("建議格式：🏷 類別名稱")
             }
         }
     }
@@ -225,15 +241,15 @@ struct AddGeneralTransactionView: View {
         let trimmedDesc = description.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedCarrier = carrierCode.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let defaultDesc = (transactionType == .expense) ? "一般支出" : "一般收入"
-        let finalDesc = trimmedDesc.isEmpty ? defaultDesc : trimmedDesc
         let newTransaction = GeneralTransaction(
             date: transactionDate,
             memberName: member.name,
             amount: parsedAmount,
-            description: finalDesc,
+            description: trimmedDesc.isEmpty
+                ? (transactionType == .expense ? finalCategory : "一般收入")
+                : trimmedDesc,
             type: transactionType,
-            category: selectedCategory,
+            category: finalCategory,
             invoiceCarrier: trimmedCarrier.isEmpty ? nil : trimmedCarrier,
             invoiceImageData: invoiceImageData
         )

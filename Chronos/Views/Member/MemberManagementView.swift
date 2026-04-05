@@ -73,6 +73,11 @@ struct MemberManagementView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     if !members.isEmpty { EditButton() }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: CategorySettingsView()) {
+                        Label("類別", systemImage: "tag.fill")
+                    }
+                }
             }
         }
     }
@@ -96,3 +101,4 @@ struct MemberManagementView: View {
         saveAction()
     }
 }
+

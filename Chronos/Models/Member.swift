@@ -1,6 +1,6 @@
 //
 //  Member.swift
-//  Chronos
+//  KinKeep
 //
 
 import Foundation
@@ -9,5 +9,6 @@ import Foundation
 struct Member: Identifiable, Codable, Hashable {
     var id = UUID()
     var name: String
-    var colorHex: String // 用於 UI 標記的顏色
+    var colorHex: String = "#5C5CFF" // 預設顏色
 }
+

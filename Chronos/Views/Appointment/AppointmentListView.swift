@@ -1,6 +1,6 @@
 //
 //  AppointmentListView.swift
-//  Chronos
+//  KinKeep
 //
 
 import SwiftUI
@@ -13,33 +13,23 @@ struct AppointmentRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                let memberColor = members.first(where: { $0.name == appointment.name })?.colorHex ?? "#000000"
+                let memberColor = members.first(where: { $0.name == appointment.name })?.colorHex ?? "#5C5CFF"
                 Circle()
                     .fill(Color(hex: memberColor))
                     .frame(width: 10, height: 10)
                     .padding(.trailing, 4)
-
                 Text(appointment.name)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-
+                    .font(.title3).fontWeight(.bold)
                 Spacer()
-
                 Text(appointment.service)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .font(.caption).fontWeight(.medium)
+                    .padding(.horizontal, 8).padding(.vertical, 4)
                     .background(Color.indigo.opacity(0.15))
-                    .foregroundColor(.indigo)
-                    .cornerRadius(8)
+                    .foregroundColor(.indigo).cornerRadius(8)
             }
 
             if let detail = appointment.extraServiceDetail, !detail.isEmpty {
-                Text("附註: \(detail)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                Text("附註: \(detail)").font(.caption2).foregroundColor(.secondary)
             }
 
             HStack(spacing: 4) {
@@ -48,23 +38,31 @@ struct AppointmentRow: View {
                 Text("@")
                 Text(appointment.date, style: .time)
             }
-            .font(.footnote)
-            .foregroundColor(.secondary)
+            .font(.footnote).foregroundColor(.secondary)
 
             if let amount = appointment.amount {
                 Text("金額: $\(amount, specifier: "%.0f") (預約支出)")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.red)
+                    .font(.subheadline).fontWeight(.bold).foregroundColor(.red)
             }
 
-            if let desc = appointment.photoDescription, !desc.isEmpty || appointment.isPhotoAttached {
+            // 真實照片縮圖
+            if let data = appointment.photoData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable().scaledToFill()
+                    .frame(height: 60).clipped().cornerRadius(8)
+            } else if let desc = appointment.photoDescription, !desc.isEmpty {
                 HStack(spacing: 4) {
-                    Image(systemName: appointment.isPhotoAttached ? "photo.fill" : "camera.fill")
-                        .foregroundColor(.orange)
-                    Text(appointment.isPhotoAttached ? "已附加照片" : "已記錄文字備註")
+                    Image(systemName: "text.bubble").foregroundColor(.orange)
+                    Text("已記錄文字備註").font(.caption)
                 }
-                .font(.caption)
+            }
+
+            // 重複預約標示
+            if appointment.recurrence != .none {
+                HStack(spacing: 4) {
+                    Image(systemName: "repeat").foregroundColor(.teal)
+                    Text(appointment.recurrence.rawValue).font(.caption).foregroundColor(.teal)
+                }
             }
         }
         .padding(.vertical, 4)
@@ -81,9 +79,7 @@ struct AppointmentListView: View {
     @State private var isShowingAddAppointment = false
 
     private func binding(for appointment: Appointment) -> Binding<Appointment>? {
-        guard let index = appointments.firstIndex(where: { $0.id == appointment.id }) else {
-            return nil
-        }
+        guard let index = appointments.firstIndex(where: { $0.id == appointment.id }) else { return nil }
         return Binding(
             get: { self.appointments[index] },
             set: { self.appointments[index] = $0 }
@@ -121,14 +117,10 @@ struct AppointmentListView: View {
             .navigationTitle("預約列表")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if !appointments.isEmpty {
-                        EditButton()
-                    }
+                    if !appointments.isEmpty { EditButton() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowingAddAppointment = true
-                    } label: {
+                    Button { isShowingAddAppointment = true } label: {
                         Label("新增預約", systemImage: "plus.circle.fill")
                     }
                 }
@@ -143,3 +135,4 @@ struct AppointmentListView: View {
         }
     }
 }
+

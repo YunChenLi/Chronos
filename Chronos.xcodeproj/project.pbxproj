@@ -10,12 +10,8 @@
 		5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */; };
 		5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */; };
 		5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5502F80C62700FE6FA7 /* Appointment.swift */; };
-		5874B5C42F80D3EF003AE4E8 /* GeneralTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */; };
 		5874B5C52F80D3F3003AE4E8 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5522F80C62700FE6FA7 /* Member.swift */; };
 		5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5542F80C62700FE6FA7 /* DataManager.swift */; };
-		5874B5C72F80D3FD003AE4E8 /* AddAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */; };
-		5874B5C82F80D401003AE4E8 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */; };
-		5874B5C92F80D406003AE4E8 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */; };
 		5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */; };
 		5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */; };
 		5874B5CC2F80D411003AE4E8 /* AddGeneralTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */; };
@@ -23,7 +19,16 @@
 		5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55F2F80C62700FE6FA7 /* ReportView.swift */; };
 		5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5612F80C62700FE6FA7 /* HistoryView.swift */; };
 		5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */; };
-		5874B5D12F80D421003AE4E8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5652F80C62700FE6FA7 /* ContentView.swift */; };
+		58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAB2F825422002310E9 /* NotificationManager.swift */; };
+		58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */; };
+		58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */; };
+		58CB6CB42F825461002310E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB32F825461002310E9 /* ContentView.swift */; };
+		58CB6CB62F825511002310E9 /* AddAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB52F825511002310E9 /* AddAppointmentView.swift */; };
+		58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB72F825B6A002310E9 /* ImagePicker.swift */; };
+		58CB6CBB2F825E18002310E9 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB92F825E18002310E9 /* CategoryManager.swift */; };
+		58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC12F825E92002310E9 /* InvoiceView.swift */; };
+		58CB6CC42F825ED4002310E9 /* CategorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */; };
+		58CB6CC62F825F47002310E9 /* GeneralTransaction 4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,12 +55,8 @@
 		5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronosApp.swift; sourceTree = "<group>"; };
 		5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		5872A5502F80C62700FE6FA7 /* Appointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointment.swift; sourceTree = "<group>"; };
-		5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransaction.swift; sourceTree = "<group>"; };
 		5872A5522F80C62700FE6FA7 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		5872A5542F80C62700FE6FA7 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentView.swift; sourceTree = "<group>"; };
-		5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentListView.swift; sourceTree = "<group>"; };
-		5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAppointmentView.swift; sourceTree = "<group>"; };
 		5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarGridView.swift; sourceTree = "<group>"; };
 		5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionChart.swift; sourceTree = "<group>"; };
 		5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGeneralTransactionView.swift; sourceTree = "<group>"; };
@@ -63,9 +64,18 @@
 		5872A55F2F80C62700FE6FA7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		5872A5612F80C62700FE6FA7 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManagementView.swift; sourceTree = "<group>"; };
-		5872A5652F80C62700FE6FA7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5872A5672F80C62700FE6FA7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5872A5682F80C62700FE6FA7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		58CB6CAB2F825422002310E9 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentListView.swift; sourceTree = "<group>"; };
+		58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAppointmentView.swift; sourceTree = "<group>"; };
+		58CB6CB32F825461002310E9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		58CB6CB52F825511002310E9 /* AddAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentView.swift; sourceTree = "<group>"; };
+		58CB6CB72F825B6A002310E9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		58CB6CB92F825E18002310E9 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
+		58CB6CC12F825E92002310E9 /* InvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceView.swift; sourceTree = "<group>"; };
+		58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
+		58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneralTransaction 4.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,8 +135,9 @@
 			isa = PBXGroup;
 			children = (
 				5872A5502F80C62700FE6FA7 /* Appointment.swift */,
-				5872A5512F80C62700FE6FA7 /* GeneralTransaction.swift */,
 				5872A5522F80C62700FE6FA7 /* Member.swift */,
+				58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */,
+				58CB6CB92F825E18002310E9 /* CategoryManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -135,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
+				58CB6CAB2F825422002310E9 /* NotificationManager.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -142,9 +154,9 @@
 		5872A5592F80C62700FE6FA7 /* Appointment */ = {
 			isa = PBXGroup;
 			children = (
-				5872A5562F80C62700FE6FA7 /* AddAppointmentView.swift */,
-				5872A5572F80C62700FE6FA7 /* AppointmentListView.swift */,
-				5872A5582F80C62700FE6FA7 /* EditAppointmentView.swift */,
+				58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */,
+				58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */,
+				58CB6CB52F825511002310E9 /* AddAppointmentView.swift */,
 			);
 			path = Appointment;
 			sourceTree = "<group>";
@@ -154,6 +166,8 @@
 			children = (
 				5872A55A2F80C62700FE6FA7 /* CalendarGridView.swift */,
 				5872A55B2F80C62700FE6FA7 /* ProportionChart.swift */,
+				58CB6CC12F825E92002310E9 /* InvoiceView.swift */,
+				58CB6CB72F825B6A002310E9 /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -161,6 +175,7 @@
 		5872A5602F80C62700FE6FA7 /* Finance */ = {
 			isa = PBXGroup;
 			children = (
+				58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */,
 				5872A55D2F80C62700FE6FA7 /* AddGeneralTransactionView.swift */,
 				5872A55E2F80C62700FE6FA7 /* IncomeExpenseView.swift */,
 				5872A55F2F80C62700FE6FA7 /* ReportView.swift */,
@@ -192,7 +207,7 @@
 				5872A5602F80C62700FE6FA7 /* Finance */,
 				5872A5622F80C62700FE6FA7 /* History */,
 				5872A5642F80C62700FE6FA7 /* Member */,
-				5872A5652F80C62700FE6FA7 /* ContentView.swift */,
+				58CB6CB32F825461002310E9 /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -334,20 +349,25 @@
 		584A4F622EB6F563002C5A4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
-				5874B5C72F80D3FD003AE4E8 /* AddAppointmentView.swift in Sources */,
 				5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */,
-				5874B5C82F80D401003AE4E8 /* AppointmentListView.swift in Sources */,
 				5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */,
 				5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */,
 				5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */,
 				5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */,
-				5874B5D12F80D421003AE4E8 /* ContentView.swift in Sources */,
 				5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */,
+				58CB6CBB2F825E18002310E9 /* CategoryManager.swift in Sources */,
+				58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */,
+				58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */,
+				58CB6CC62F825F47002310E9 /* GeneralTransaction 4.swift in Sources */,
+				58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */,
+				58CB6CB42F825461002310E9 /* ContentView.swift in Sources */,
+				58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */,
 				5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */,
-				5874B5C42F80D3EF003AE4E8 /* GeneralTransaction.swift in Sources */,
-				5874B5C92F80D406003AE4E8 /* EditAppointmentView.swift in Sources */,
+				58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */,
 				5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */,
 				5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */,
+				58CB6CC42F825ED4002310E9 /* CategorySettingsView.swift in Sources */,
+				58CB6CB62F825511002310E9 /* AddAppointmentView.swift in Sources */,
 				5874B5CC2F80D411003AE4E8 /* AddGeneralTransactionView.swift in Sources */,
 				5874B5CD2F80D414003AE4E8 /* IncomeExpenseView.swift in Sources */,
 				5874B5C52F80D3F3003AE4E8 /* Member.swift in Sources */,

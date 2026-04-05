@@ -15,15 +15,35 @@
 ```
 Chronos/
 ├── App/                    # App 入口 (@main)
-├── Models/                 # 資料模型 (Member, Appointment, GeneralTransaction)
+    ChronosApp/
+├── Models/                 # 資料模型 (Member, Appointment, GeneralTransaction/
+    Appointment/
+    Member/
+    CategoryManager/
 ├── Views/
 │   ├── Appointment/        # 預約相關視圖
+        AppointmentListView/
+        EditAppointView/
+        AddAppointView/
 │   ├── Finance/            # 收支相關視圖
+        CategorySettingView/
+        AddGeneralTransationView/
+        IncomeExpenseView/
+        ReportView/
 │   ├── History/            # 歷史記錄視圖
+        HistoryView/
 │   ├── Member/             # 成員管理視圖
+        MemberManagementView/
 │   └── Components/         # 共用元件 (CalendarGridView, ProportionChart)
-├── Extensions/             # Swift 擴充 (Color+Hex)
+        CalendarGridView/
+        ProportionChart/
+        InvoiceView/
+        ImagePicker/
+├── Extensions/ # Swift 擴充 (Color+Hex)
+    Color+Hex/
 └── Persistence/            # 資料儲存邏輯 (DataManager)
+    DataManager/
+    NotificationManager/
 ```
 
 ## 系統需求

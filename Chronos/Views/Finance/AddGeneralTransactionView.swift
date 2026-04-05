@@ -3,7 +3,7 @@
 //  KinKeep
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 新增日常交易視圖（含類別、發票載具）
 struct AddGeneralTransactionView: View {
@@ -51,7 +51,9 @@ struct AddGeneralTransactionView: View {
     }
 
     var isSaveDisabled: Bool {
-        amountInput.isEmpty || selectedMember == nil
+        let emptyAmount = amountInput.isEmpty
+        let noMember = (selectedMember == nil)
+        return emptyAmount || noMember
     }
 
     var body: some View {
@@ -60,8 +62,8 @@ struct AddGeneralTransactionView: View {
                 // MARK: 收支類型
                 Section {
                     Picker("類型", selection: $transactionType) {
-                        Text("💸 支出").tag(GeneralTransaction.TransactionType.expense)
-                        Text("💰 收入").tag(GeneralTransaction.TransactionType.income)
+                        Text("💸 支出").tag(GeneralTransaction.TransactionType.expense as GeneralTransaction.TransactionType)
+                        Text("💰 收入").tag(GeneralTransaction.TransactionType.income as GeneralTransaction.TransactionType)
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: transactionType) { _, newType in
@@ -79,14 +81,14 @@ struct AddGeneralTransactionView: View {
 
                     if !members.isEmpty {
                         Picker("歸屬成員", selection: $selectedMember) {
-                            ForEach(members, id: \.self) { member in
+                            ForEach(members, id: \.self) { (member: Member) in
                                 HStack {
                                     Circle()
                                         .fill(Color(hex: member.colorHex))
                                         .frame(width: 10, height: 10)
                                     Text(member.name)
                                 }
-                                .tag(Optional(member))
+                                .tag(Optional<Member>(member))
                             }
                         }
                     } else {
@@ -108,30 +110,29 @@ struct AddGeneralTransactionView: View {
                     // 類別捲動選擇
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
-                            ForEach(currentCategories, id: \.self) { category in
+                            ForEach(currentCategories, id: \.self) { (category: String) in
+                                let isSelected = (selectedCategory == category)
+                                let isExpense = (transactionType == .expense)
+                                let bgColor: Color = {
+                                    if isSelected { return isExpense ? Color.red.opacity(0.15) : Color.green.opacity(0.15) }
+                                    return Color.gray.opacity(0.1)
+                                }()
+                                let fgColor: Color = {
+                                    if isSelected { return isExpense ? .red : .green }
+                                    return .primary
+                                }()
+                                let strokeColor: Color = isSelected ? (isExpense ? .red : .green) : .clear
+
                                 Text(category)
                                     .font(.subheadline)
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 6)
-                                    .background(
-                                        selectedCategory == category
-                                            ? (transactionType == .expense ? Color.red.opacity(0.15) : Color.green.opacity(0.15))
-                                            : Color.gray.opacity(0.1)
-                                    )
-                                    .foregroundColor(
-                                        selectedCategory == category
-                                            ? (transactionType == .expense ? .red : .green)
-                                            : .primary
-                                    )
+                                    .background(bgColor)
+                                    .foregroundColor(fgColor)
                                     .cornerRadius(20)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 20)
-                                            .stroke(
-                                                selectedCategory == category
-                                                    ? (transactionType == .expense ? Color.red : Color.green)
-                                                    : Color.clear,
-                                                lineWidth: 1.5
-                                            )
+                                            .stroke(strokeColor, lineWidth: 1.5)
                                     )
                                     .onTapGesture { selectedCategory = category }
                             }
@@ -198,13 +199,14 @@ struct AddGeneralTransactionView: View {
             .alert("新增自訂類別", isPresented: $isAddingCustomCategory) {
                 TextField("輸入類別名稱（含 Emoji）", text: $newCategoryInput)
                 Button("新增") {
-                    if transactionType == .expense {
-                        categoryManager.addExpenseCategory(newCategoryInput)
-                    } else {
-                        categoryManager.addIncomeCategory(newCategoryInput)
-                    }
-                    if !newCategoryInput.isEmpty {
-                        selectedCategory = newCategoryInput
+                    let name = newCategoryInput
+                    if !name.isEmpty {
+                        if transactionType == .expense {
+                            categoryManager.addExpenseCategory(name)
+                        } else {
+                            categoryManager.addIncomeCategory(name)
+                        }
+                        selectedCategory = name
                     }
                     newCategoryInput = ""
                 }
@@ -223,13 +225,13 @@ struct AddGeneralTransactionView: View {
         let trimmedDesc = description.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedCarrier = carrierCode.trimmingCharacters(in: .whitespacesAndNewlines)
 
+        let defaultDesc = (transactionType == .expense) ? "一般支出" : "一般收入"
+        let finalDesc = trimmedDesc.isEmpty ? defaultDesc : trimmedDesc
         let newTransaction = GeneralTransaction(
             date: transactionDate,
             memberName: member.name,
             amount: parsedAmount,
-            description: trimmedDesc.isEmpty
-                ? (transactionType == .expense ? "一般支出" : "一般收入")
-                : trimmedDesc,
+            description: finalDesc,
             type: transactionType,
             category: selectedCategory,
             invoiceCarrier: trimmedCarrier.isEmpty ? nil : trimmedCarrier,

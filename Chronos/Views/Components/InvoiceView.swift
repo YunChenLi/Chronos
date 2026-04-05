@@ -5,8 +5,9 @@
 //  雲端發票載具記錄 + 發票掃描
 //
 
-import SwiftUI
+internal import SwiftUI
 import PhotosUI
+internal import Combine
 
 /// 發票記錄區塊（內嵌在表單中使用）
 struct InvoiceSection: View {
@@ -116,4 +117,6 @@ struct InvoiceSection: View {
 /// 掃描輔助（未來可整合 Vision OCR）
 class InvoiceScannerHelper: ObservableObject {
     // 預留：未來可用 Vision framework 自動辨識載具條碼
+    // 使用 ObservableObject 預設的 objectWillChange，無需自行宣告
+    init() {}
 }

@@ -3,7 +3,7 @@
 //  KinKeep
 //
 
-import SwiftUI
+internal import SwiftUI
 import PhotosUI
 
 /// 編輯預約視圖（含真實照片功能）

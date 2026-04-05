@@ -5,7 +5,7 @@
 //  UIKit 相機整合元件
 //
 
-import SwiftUI
+internal import SwiftUI
 import UIKit
 
 /// UIKit 相機 / 相簿選擇器包裝

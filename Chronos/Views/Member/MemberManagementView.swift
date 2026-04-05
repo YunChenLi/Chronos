@@ -3,7 +3,7 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 成員管理視圖 (Tab 5)
 struct MemberManagementView: View {

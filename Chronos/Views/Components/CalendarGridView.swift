@@ -3,7 +3,7 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 月曆網格視圖
 struct CalendarGridView: View {

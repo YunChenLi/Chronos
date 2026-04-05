@@ -3,7 +3,7 @@
 //  KinKeep
 //
 
-import SwiftUI
+internal import SwiftUI
 import EventKit
 import PhotosUI
 

@@ -3,7 +3,7 @@
 //  KinKeep
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 預約列表的單元格視圖
 struct AppointmentRow: View {

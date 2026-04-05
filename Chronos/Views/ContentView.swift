@@ -3,8 +3,10 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 import UserNotifications
+
+@MainActor
 
 /// 主內容視圖（TabView 入口）
 struct ContentView: View {
@@ -34,9 +36,9 @@ struct ContentView: View {
 
             // Tab 2: 預約歷史
             HistoryView(appointments: appointments)
-                .tabItem {
-                    Label("預約歷史", systemImage: "clock.fill")
-                }
+                  .tabItem {
+                      Label("預約歷史", systemImage: "clock.fill")
+                  }
 
             // Tab 3: 收入/支出
             IncomeExpenseView(
@@ -96,3 +98,4 @@ struct ContentView: View {
         DataManager.saveTransactions(generalTransactions)
     }
 }
+

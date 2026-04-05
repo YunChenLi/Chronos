@@ -3,7 +3,7 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 橫向比例柱狀圖元件
 struct ProportionChart: View {

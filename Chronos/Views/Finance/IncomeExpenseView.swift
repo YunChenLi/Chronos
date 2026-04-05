@@ -3,7 +3,7 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 收入/支出視圖 (Tab 3)
 struct IncomeExpenseView: View {

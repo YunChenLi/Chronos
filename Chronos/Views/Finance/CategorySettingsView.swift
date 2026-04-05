@@ -5,7 +5,7 @@
 //  管理自訂支出／收入類別
 //
 
-import SwiftUI
+internal import SwiftUI
 
 struct CategorySettingsView: View {
     @StateObject private var categoryManager = CategoryManager.shared

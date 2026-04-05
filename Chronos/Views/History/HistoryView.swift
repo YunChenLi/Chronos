@@ -3,7 +3,7 @@
 //  Chronos
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 預約歷史記錄視圖 (Tab 2)
 struct HistoryView: View {

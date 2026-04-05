@@ -3,7 +3,7 @@
 //  KinKeep
 //
 
-import SwiftUI
+internal import SwiftUI
 
 /// 支出報告視圖 (Tab 4)
 struct ReportView: View {

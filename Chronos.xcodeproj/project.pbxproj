@@ -24,7 +24,6 @@
 		5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5612F80C62700FE6FA7 /* HistoryView.swift */; };
 		5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */; };
 		5874B5D12F80D421003AE4E8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5652F80C62700FE6FA7 /* ContentView.swift */; };
-		58CB6CAA2F8252AF002310E9 /* NotificationManager 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,9 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		584A4F662EB6F563002C5A4B /* KinKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KinKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KinKeepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F662EB6F563002C5A4B /* Chronos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chronos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F772EB6F565002C5A4B /* ChronosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronosApp.swift; sourceTree = "<group>"; };
 		5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		5872A5502F80C62700FE6FA7 /* Appointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointment.swift; sourceTree = "<group>"; };
@@ -67,7 +66,6 @@
 		5872A5652F80C62700FE6FA7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5872A5672F80C62700FE6FA7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5872A5682F80C62700FE6FA7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationManager 2.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,9 +98,9 @@
 		584A4F672EB6F563002C5A4B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				584A4F662EB6F563002C5A4B /* KinKeep.app */,
-				584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */,
-				584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */,
+				584A4F662EB6F563002C5A4B /* Chronos.app */,
+				584A4F772EB6F565002C5A4B /* ChronosTests.xctest */,
+				584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,7 +135,6 @@
 			isa = PBXGroup;
 			children = (
 				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
-				58CB6CA92F8252AF002310E9 /* NotificationManager 2.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -217,9 +214,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		584A4F652EB6F563002C5A4B /* KinKeep */ = {
+		584A4F652EB6F563002C5A4B /* Chronos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeep" */;
+			buildConfigurationList = 584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "Chronos" */;
 			buildPhases = (
 				584A4F622EB6F563002C5A4B /* Sources */,
 				584A4F632EB6F563002C5A4B /* Frameworks */,
@@ -227,14 +224,14 @@
 			);
 			buildRules = (
 			);
-			name = KinKeep;
+			name = Chronos;
 			productName = Chronos;
-			productReference = 584A4F662EB6F563002C5A4B /* KinKeep.app */;
+			productReference = 584A4F662EB6F563002C5A4B /* Chronos.app */;
 			productType = "com.apple.product-type.application";
 		};
-		584A4F762EB6F565002C5A4B /* KinKeepTests */ = {
+		584A4F762EB6F565002C5A4B /* ChronosTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepTests" */;
+			buildConfigurationList = 584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosTests" */;
 			buildPhases = (
 				584A4F732EB6F565002C5A4B /* Sources */,
 				584A4F742EB6F565002C5A4B /* Frameworks */,
@@ -245,14 +242,14 @@
 			dependencies = (
 				584A4F792EB6F565002C5A4B /* PBXTargetDependency */,
 			);
-			name = KinKeepTests;
+			name = ChronosTests;
 			productName = ChronosTests;
-			productReference = 584A4F772EB6F565002C5A4B /* KinKeepTests.xctest */;
+			productReference = 584A4F772EB6F565002C5A4B /* ChronosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		584A4F802EB6F565002C5A4B /* KinKeepUITests */ = {
+		584A4F802EB6F565002C5A4B /* ChronosUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepUITests" */;
+			buildConfigurationList = 584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosUITests" */;
 			buildPhases = (
 				584A4F7D2EB6F565002C5A4B /* Sources */,
 				584A4F7E2EB6F565002C5A4B /* Frameworks */,
@@ -263,9 +260,9 @@
 			dependencies = (
 				584A4F832EB6F565002C5A4B /* PBXTargetDependency */,
 			);
-			name = KinKeepUITests;
+			name = ChronosUITests;
 			productName = ChronosUITests;
-			productReference = 584A4F812EB6F565002C5A4B /* KinKeepUITests.xctest */;
+			productReference = 584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -294,7 +291,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "KinKeep" */;
+			buildConfigurationList = 584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "Chronos" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -308,9 +305,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				584A4F652EB6F563002C5A4B /* KinKeep */,
-				584A4F762EB6F565002C5A4B /* KinKeepTests */,
-				584A4F802EB6F565002C5A4B /* KinKeepUITests */,
+				584A4F652EB6F563002C5A4B /* Chronos */,
+				584A4F762EB6F565002C5A4B /* ChronosTests */,
+				584A4F802EB6F565002C5A4B /* ChronosUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -341,7 +338,6 @@
 				5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */,
 				5874B5C82F80D401003AE4E8 /* AppointmentListView.swift in Sources */,
 				5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */,
-				58CB6CAA2F8252AF002310E9 /* NotificationManager 2.swift in Sources */,
 				5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */,
 				5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */,
 				5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */,
@@ -372,18 +368,18 @@
 /* Begin PBXTargetDependency section */
 		584A4F792EB6F565002C5A4B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
+			target = 584A4F652EB6F563002C5A4B /* Chronos */;
 			targetProxy = 584A4F782EB6F565002C5A4B /* PBXContainerItemProxy */;
 		};
 		584A4F832EB6F565002C5A4B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 584A4F652EB6F563002C5A4B /* KinKeep */;
+			target = 584A4F652EB6F563002C5A4B /* Chronos */;
 			targetProxy = 584A4F822EB6F565002C5A4B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeep" */ = {
+		584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "Chronos" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -450,7 +446,7 @@
 			};
 			name = Debug;
 		};
-		584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeep" */ = {
+		584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "Chronos" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -517,7 +513,7 @@
 			};
 			name = Release;
 		};
-		584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "KinKeep" */ = {
+		584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "Chronos" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -579,7 +575,7 @@
 			};
 			name = Debug;
 		};
-		584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "KinKeep" */ = {
+		584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "Chronos" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -633,7 +629,7 @@
 			};
 			name = Release;
 		};
-		584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepTests" */ = {
+		584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "ChronosTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -654,12 +650,12 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KinKeep.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KinKeep";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chronos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chronos";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
-		584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepTests" */ = {
+		584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "ChronosTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -680,12 +676,12 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KinKeep.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KinKeep";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chronos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Chronos";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
-		584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepUITests" */ = {
+		584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "ChronosUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -710,7 +706,7 @@
 			};
 			name = Debug;
 		};
-		584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepUITests" */ = {
+		584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "ChronosUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -738,35 +734,35 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "KinKeep" */ = {
+		584A4F612EB6F563002C5A4B /* Build configuration list for PBXProject "Chronos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "KinKeep" */,
-				584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "KinKeep" */,
+				584A4F8D2EB6F565002C5A4B /* Debug configuration for PBXProject "Chronos" */,
+				584A4F8E2EB6F565002C5A4B /* Release configuration for PBXProject "Chronos" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeep" */ = {
+		584A4F8A2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "Chronos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeep" */,
-				584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeep" */,
+				584A4F8B2EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "Chronos" */,
+				584A4F8C2EB6F565002C5A4B /* Release configuration for PBXNativeTarget "Chronos" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepTests" */ = {
+		584A4F8F2EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepTests" */,
-				584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepTests" */,
+				584A4F902EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "ChronosTests" */,
+				584A4F912EB6F565002C5A4B /* Release configuration for PBXNativeTarget "ChronosTests" */,
 			);
 			defaultConfigurationName = Release;
 		};
-		584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "KinKeepUITests" */ = {
+		584A4F922EB6F565002C5A4B /* Build configuration list for PBXNativeTarget "ChronosUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "KinKeepUITests" */,
-				584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "KinKeepUITests" */,
+				584A4F932EB6F565002C5A4B /* Debug configuration for PBXNativeTarget "ChronosUITests" */,
+				584A4F942EB6F565002C5A4B /* Release configuration for PBXNativeTarget "ChronosUITests" */,
 			);
 			defaultConfigurationName = Release;
 		};

@@ -38,3 +38,4 @@ struct TransactionCategory {
         "💰 兼職收入", "🎉 紅包", "💳 退款", "📋 其他"
     ]
 }
+

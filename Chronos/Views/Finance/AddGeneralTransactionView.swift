@@ -17,21 +17,19 @@ struct AddGeneralTransactionView: View {
 
     @State private var amountInput: String = ""
     @State private var transactionDate: Date
-    @State private var selectedMember: Member?
     @State private var description: String = ""
     @State private var transactionType: GeneralTransaction.TransactionType = .expense
 
-    // 🆕 二層類別
+    // 用 UUID 追蹤選中的成員（避免 Binding self immutable 問題）
+    @State private var selectedMemberID: UUID?
+
+    // 二層類別
     @State private var selectedMainCategory: String = ""
     @State private var selectedSubCategory: String = ""
 
-    // 🆕 發票
+    // 發票
     @State private var carrierCode: String = ""
     @State private var invoiceImageData: Data? = nil
-
-    // 自訂類別
-    @State private var isAddingCustomCategory = false
-    @State private var newCategoryInput: String = ""
 
     init(
         generalTransactions: Binding<[GeneralTransaction]>,
@@ -44,28 +42,31 @@ struct AddGeneralTransactionView: View {
         self.saveAction = saveAction
         self.initialDate = initialDate
         self._transactionDate = State(initialValue: initialDate)
-        self._selectedMember = State(initialValue: members.first)
+        self._selectedMemberID = State(initialValue: members.first?.id)
     }
 
-    // 目前的主類別列表（依收支類型切換）
+    // 目前選中的成員
+    var selectedMember: Member? {
+        members.first(where: { $0.id == selectedMemberID })
+    }
+
+    // 主類別列表
     var mainCategories: [String] {
         transactionType == .expense
             ? LifestyleManager.shared.mainCategories
             : LifestyleManager.shared.incomeCategories
     }
 
-    // 目前的子類別列表
+    // 子類別列表
     var subCategories: [String] {
         transactionType == .expense
             ? lifestyleManager.getSubCategories(for: selectedMainCategory)
-            : [] // 收入類別不需要子類別
+            : []
     }
 
-    // 最終類別字串（用於儲存）
+    // 最終類別字串
     var finalCategory: String {
-        if transactionType == .income {
-            return selectedMainCategory
-        }
+        if transactionType == .income { return selectedMainCategory }
         return selectedSubCategory.isEmpty
             ? selectedMainCategory
             : "\(selectedMainCategory) · \(selectedSubCategory)"
@@ -87,27 +88,32 @@ struct AddGeneralTransactionView: View {
                     .pickerStyle(.segmented)
                     .onChange(of: transactionType) { _, _ in
                         selectedMainCategory = mainCategories.first ?? ""
-                        selectedSubCategory = ""
+                        selectedSubCategory = lifestyleManager.getSubCategories(for: selectedMainCategory).first ?? ""
                     }
                 }
 
                 // MARK: 基本資訊
                 Section("基本資訊") {
-                    DatePicker("日期與時間", selection: $transactionDate, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("日期與時間", selection: $transactionDate,
+                               displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
 
                     if !members.isEmpty {
-                        Picker("歸屬成員", selection: $selectedMember) {
-                            ForEach(members, id: \.self) { member in
+                        // 用 UUID 做 Picker，避免 self immutable 問題
+                        Picker("歸屬成員", selection: $selectedMemberID) {
+                            ForEach(members) { member in
                                 HStack {
-                                    Circle().fill(Color(hex: member.colorHex)).frame(width: 10, height: 10)
+                                    Circle()
+                                        .fill(Color(hex: member.colorHex))
+                                        .frame(width: 10, height: 10)
                                     Text(member.name)
                                 }
-                                .tag(Optional(member))
+                                .tag(member.id as UUID?)
                             }
                         }
                     } else {
-                        Text("⚠️ 請先在「成員管理」新增成員").foregroundColor(.orange)
+                        Text("⚠️ 請先在「成員管理」新增成員")
+                            .foregroundColor(.orange)
                     }
 
                     HStack {
@@ -120,7 +126,7 @@ struct AddGeneralTransactionView: View {
                     }
                 }
 
-                // MARK: 🆕 主類別選擇
+                // MARK: 主類別選擇
                 Section(transactionType == .expense ? "支出主類別" : "收入類別") {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
@@ -130,7 +136,9 @@ struct AddGeneralTransactionView: View {
                                     .padding(.horizontal, 14).padding(.vertical, 8)
                                     .background(
                                         selectedMainCategory == cat
-                                            ? (transactionType == .expense ? Color.red.opacity(0.15) : Color.green.opacity(0.15))
+                                            ? (transactionType == .expense
+                                               ? Color.red.opacity(0.15)
+                                               : Color.green.opacity(0.15))
                                             : Color.gray.opacity(0.1)
                                     )
                                     .foregroundColor(
@@ -159,7 +167,7 @@ struct AddGeneralTransactionView: View {
                     .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
                 }
 
-                // MARK: 🆕 子類別選擇（僅支出有）
+                // MARK: 子類別選擇（僅支出有）
                 if transactionType == .expense && !subCategories.isEmpty {
                     Section("支出子類別") {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -177,7 +185,10 @@ struct AddGeneralTransactionView: View {
                                         .cornerRadius(16)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 16)
-                                                .stroke(selectedSubCategory == sub ? Color.indigo : Color.clear, lineWidth: 1)
+                                                .stroke(
+                                                    selectedSubCategory == sub ? Color.indigo : Color.clear,
+                                                    lineWidth: 1
+                                                )
                                         )
                                         .onTapGesture { selectedSubCategory = sub }
                                 }
@@ -186,10 +197,10 @@ struct AddGeneralTransactionView: View {
                         }
                         .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
 
-                        // 已選顯示
                         if !selectedSubCategory.isEmpty {
                             HStack {
-                                Image(systemName: "tag.fill").foregroundColor(.indigo).font(.caption)
+                                Image(systemName: "tag.fill")
+                                    .foregroundColor(.indigo).font(.caption)
                                 Text("\(selectedMainCategory) · \(selectedSubCategory)")
                                     .font(.caption).foregroundColor(.indigo)
                             }
@@ -203,7 +214,8 @@ struct AddGeneralTransactionView: View {
                         .frame(height: 70)
                         .overlay(
                             Text(description.isEmpty ? "輸入說明或備註..." : "")
-                                .foregroundColor(.secondary).allowsHitTesting(false)
+                                .foregroundColor(.secondary)
+                                .allowsHitTesting(false)
                                 .padding(.top, 8).padding(.leading, 5),
                             alignment: .topLeading
                         )

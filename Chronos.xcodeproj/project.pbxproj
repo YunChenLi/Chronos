@@ -28,10 +28,10 @@
 		58CB6CBB2F825E18002310E9 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB92F825E18002310E9 /* CategoryManager.swift */; };
 		58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC12F825E92002310E9 /* InvoiceView.swift */; };
 		58CB6CC42F825ED4002310E9 /* CategorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */; };
-		58CB6CC62F825F47002310E9 /* GeneralTransaction 4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */; };
 		58CB6CC82F829A8D002310E9 /* LifestyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC72F829A8D002310E9 /* LifestyleManager.swift */; };
 		58CB6CCC2F829AA5002310E9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CCA2F829AA5002310E9 /* SettingsView.swift */; };
 		58CB6CCD2F829AA5002310E9 /* LifestyleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC92F829AA5002310E9 /* LifestyleSettingsView.swift */; };
+		58CB6CD12F82A18F002310E9 /* GeneralTransation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CD02F82A17B002310E9 /* GeneralTransation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,10 +78,10 @@
 		58CB6CB92F825E18002310E9 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
 		58CB6CC12F825E92002310E9 /* InvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceView.swift; sourceTree = "<group>"; };
 		58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
-		58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeneralTransaction 4.swift"; sourceTree = "<group>"; };
 		58CB6CC72F829A8D002310E9 /* LifestyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifestyleManager.swift; sourceTree = "<group>"; };
 		58CB6CC92F829AA5002310E9 /* LifestyleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifestyleSettingsView.swift; sourceTree = "<group>"; };
 		58CB6CCA2F829AA5002310E9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		58CB6CD02F82A17B002310E9 /* GeneralTransation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,10 +140,10 @@
 		5872A5532F80C62700FE6FA7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				58CB6CD02F82A17B002310E9 /* GeneralTransation.swift */,
 				58CB6CC72F829A8D002310E9 /* LifestyleManager.swift */,
 				5872A5502F80C62700FE6FA7 /* Appointment.swift */,
 				5872A5522F80C62700FE6FA7 /* Member.swift */,
-				58CB6CC52F825F47002310E9 /* GeneralTransaction 4.swift */,
 				58CB6CB92F825E18002310E9 /* CategoryManager.swift */,
 			);
 			path = Models;
@@ -378,11 +378,11 @@
 				58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */,
 				58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */,
 				58CB6CC82F829A8D002310E9 /* LifestyleManager.swift in Sources */,
-				58CB6CC62F825F47002310E9 /* GeneralTransaction 4.swift in Sources */,
 				58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */,
 				58CB6CB42F825461002310E9 /* ContentView.swift in Sources */,
 				58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */,
 				5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */,
+				58CB6CD12F82A18F002310E9 /* GeneralTransation.swift in Sources */,
 				58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */,
 				5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */,
 				5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */,

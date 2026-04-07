@@ -6,7 +6,6 @@
 internal import SwiftUI
 import UserNotifications
 
-/// 主內容視圖（TabView 入口）
 struct ContentView: View {
     @State private var appointments: [Appointment] = []
     @State private var members: [Member] = []
@@ -28,69 +27,60 @@ struct ContentView: View {
                 saveAction: saveAppointments,
                 deleteAction: deleteAppointments
             )
-            .tabItem {
-                Label("預約", systemImage: "list.bullet.clipboard")
-            }
+            .tabItem { Label("預約", systemImage: "list.bullet.clipboard") }
 
-            // Tab 2: 收入/支出
+            // Tab 2: 探索店家（含地圖預約）
+            ExploreView(
+                appointments: $appointments,
+                members: members,
+                saveAction: saveAppointments
+            )
+            .tabItem { Label("探索", systemImage: "map.fill") }
+
+            // Tab 3: 收支
             IncomeExpenseView(
                 appointments: appointments,
                 generalTransactions: $generalTransactions,
                 members: members,
                 saveAction: saveTransactions
             )
-            .tabItem {
-                Label("收支", systemImage: "dollarsign.circle.fill")
-            }
+            .tabItem { Label("收支", systemImage: "dollarsign.circle.fill") }
 
-            // Tab 3: 支出報告
+            // Tab 4: 報告
             ReportView(
                 appointments: appointments,
                 generalTransactions: generalTransactions,
                 members: members
             )
-            .tabItem {
-                Label("報告", systemImage: "chart.bar.fill")
-            }
+            .tabItem { Label("報告", systemImage: "chart.bar.fill") }
 
-            // Tab 4: 更多（成員管理、預約歷史、設定）
+            // Tab 5: 更多
             MoreView(
                 members: $members,
                 appointments: appointments,
                 saveMembersAction: saveMembers
             )
-            .tabItem {
-                Label("更多", systemImage: "ellipsis.circle.fill")
-            }
+            .tabItem { Label("更多", systemImage: "ellipsis.circle.fill") }
         }
         .tint(.indigo)
     }
 
     // MARK: - 資料持久化
 
-    func saveAppointments() {
-        DataManager.saveAppointments(appointments)
-    }
+    func saveAppointments() { DataManager.saveAppointments(appointments) }
 
     func deleteAppointments(at offsets: IndexSet) {
-        let sortedAppointments = appointments.sorted(by: { $0.date < $1.date })
-        let appointmentsToDelete = offsets.map { sortedAppointments[$0] }
-
-        for appointment in appointmentsToDelete {
-            if let index = appointments.firstIndex(where: { $0.id == appointment.id }) {
-                NotificationManager.cancelReminders(for: appointment)
-                appointments.remove(at: index)
+        let sorted = appointments.sorted(by: { $0.date < $1.date })
+        for appt in offsets.map({ sorted[$0] }) {
+            if let idx = appointments.firstIndex(where: { $0.id == appt.id }) {
+                NotificationManager.cancelReminders(for: appt)
+                appointments.remove(at: idx)
             }
         }
         saveAppointments()
     }
 
-    func saveMembers() {
-        DataManager.saveMembers(members)
-    }
-
-    func saveTransactions() {
-        DataManager.saveTransactions(generalTransactions)
-    }
+    func saveMembers() { DataManager.saveMembers(members) }
+    func saveTransactions() { DataManager.saveTransactions(generalTransactions) }
 }
 

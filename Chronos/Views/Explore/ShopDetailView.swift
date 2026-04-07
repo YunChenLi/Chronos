@@ -19,7 +19,7 @@ struct ShopDetailView: View {
     @State private var isShowingBooking = false
     @State private var mapPosition: MapCameraPosition = .automatic
 
-    init(shop: Shop, appointments: Binding<[Appointment]>, members: [Member], saveAction: @escaping () -> Void) {a
+    init(shop: Shop, appointments: Binding<[Appointment]>, members: [Member], saveAction: @escaping () -> Void) {
         self.shop = shop
         self._appointments = appointments
         self.members = members
@@ -186,19 +186,8 @@ struct ShopDetailView: View {
                 .padding(.horizontal, 16).padding(.top, 16)
 
             Map(position: $mapPosition) {
-                Annotation(shop.name, coordinate: shop.coordinate) {
-                    VStack(spacing: 4) {
-                        ZStack {
-                            Circle().fill(Color(hex: shop.category.color))
-                                .frame(width: 36, height: 36)
-                            Image(systemName: shop.category.icon)
-                                .foregroundColor(.white).font(.system(size: 16))
-                        }
-                        Text(shop.name).font(.caption2).fontWeight(.semibold)
-                            .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(.ultraThinMaterial).cornerRadius(6)
-                    }
-                }
+                Marker(shop.name, systemImage: shop.category.icon, coordinate: shop.coordinate)
+                    .tint(Color(hex: shop.category.color))
             }
             .frame(height: 160)
             .cornerRadius(12)

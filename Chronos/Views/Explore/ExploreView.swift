@@ -6,6 +6,7 @@
 internal import SwiftUI
 import MapKit
 import CoreLocation
+internal import Combine
 
 struct ExploreView: View {
     @Binding var appointments: [Appointment]
@@ -149,7 +150,7 @@ struct ExploreView: View {
     private var shopMapView: some View {
         ZStack(alignment: .bottom) {
             Map(position: $mapPosition) {
-                UserLocation()
+                UserAnnotation()
                 ForEach(sortedShops) { shop in
                     Annotation(shop.name, coordinate: shop.coordinate) {
                         ShopMapPin(shop: shop, isSelected: selectedShop?.id == shop.id)

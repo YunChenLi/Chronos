@@ -2,11 +2,9 @@
 //  ShopBookingView.swift
 //  KinKeep
 //
-//  線上預約表單：從店家選好服務後，填寫預約資料
-//
 
 internal import SwiftUI
-internal import Combine
+import EventKit
 
 struct ShopBookingView: View {
     let shop: Shop
@@ -16,14 +14,18 @@ struct ShopBookingView: View {
     var saveAction: () -> Void
 
     @Environment(\.dismiss) var dismiss
-    @StateObject private var notificationManager = BookingNotificationHelper()
 
     // 預約資料
     @State private var selectedDate: Date = nextHalfHour()
     @State private var selectedMemberID: UUID?
     @State private var note: String = ""
     @State private var selectedReminders: Set<ReminderOption> = [.oneHour, .thirtyMin]
+
+    // 日曆相關
+    private let eventStore = EKEventStore()
     @State private var isBookingConfirmed = false
+    @State private var calendarStatusMessage = ""
+    @State private var isShowingStatusAlert = false
 
     init(shop: Shop, service: ShopService, appointments: Binding<[Appointment]>,
          members: [Member], saveAction: @escaping () -> Void) {
@@ -39,15 +41,18 @@ struct ShopBookingView: View {
         members.first(where: { $0.id == selectedMemberID })
     }
 
-    var isSaveDisabled: Bool {
-        selectedMember == nil
+    var isSaveDisabled: Bool { selectedMember == nil }
+
+    // 預計結束時間
+    var endTime: Date {
+        Calendar.current.date(byAdding: .minute, value: service.duration, to: selectedDate) ?? selectedDate
     }
 
     var body: some View {
         NavigationView {
             Form {
                 // MARK: 預約摘要
-                Section {
+                Section("預約服務") {
                     HStack(spacing: 12) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -69,8 +74,6 @@ struct ShopBookingView: View {
                         }
                     }
                     .padding(.vertical, 4)
-                } header: {
-                    Text("預約服務")
                 }
 
                 // MARK: 預約人
@@ -100,17 +103,13 @@ struct ShopBookingView: View {
                     )
                     .datePickerStyle(.graphical)
 
-                    // 預約時間摘要
                     HStack {
                         Image(systemName: "clock.fill").foregroundColor(.indigo)
                         Text(selectedDate.formatted(date: .long, time: .shortened))
                             .font(.subheadline).foregroundColor(.indigo)
                     }
-
-                    // 預計結束時間
                     HStack {
                         Image(systemName: "clock.badge.checkmark").foregroundColor(.secondary)
-                        let endTime = Calendar.current.date(byAdding: .minute, value: service.duration, to: selectedDate) ?? selectedDate
                         Text("預計結束：\(endTime.formatted(date: .omitted, time: .shortened))")
                             .font(.caption).foregroundColor(.secondary)
                     }
@@ -156,7 +155,7 @@ struct ShopBookingView: View {
                 } label: {
                     HStack {
                         Image(systemName: "calendar.badge.plus")
-                        Text("確認預約")
+                        Text("確認預約並加入日曆")
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -170,16 +169,17 @@ struct ShopBookingView: View {
                     Button("取消") { dismiss() }
                 }
             }
-            // 預約成功 Alert
-            .alert("預約成功 🎉", isPresented: $isBookingConfirmed) {
+            // 日曆同步結果 Alert（包含成功/失敗訊息）
+            .alert(isBookingConfirmed ? "預約成功 🎉" : "預約已儲存",
+                   isPresented: $isShowingStatusAlert) {
                 Button("完成") { dismiss() }
             } message: {
-                Text("已將「\(service.name)」預約加入您的預約列表，並設定提醒通知。")
+                Text(calendarStatusMessage)
             }
         }
     }
 
-    // MARK: - 確認預約邏輯
+    // MARK: - 確認預約 + 日曆同步
 
     func confirmBooking() {
         guard let member = selectedMember else { return }
@@ -192,19 +192,81 @@ struct ShopBookingView: View {
             phone: shop.phone,
             amount: service.price,
             photoDescription: note.isEmpty ? nil : note,
-            extraServiceDetail: "📍 \(shop.name) · \(shop.address)",
+            extraServiceDetail: "📍 \(shop.name)・\(shop.address)",
             reminderOptions: reminders
         )
         newAppointment.recurrence = .none
 
+        // 1. 存入 App 預約列表
         appointments.append(newAppointment)
-        NotificationManager.scheduleReminders(for: newAppointment, options: reminders)
         saveAction()
 
-        isBookingConfirmed = true
+        // 2. 設定本地通知
+        NotificationManager.scheduleReminders(for: newAppointment, options: reminders)
+
+        // 3. 同步到 Apple Calendar
+        addToAppleCalendar(appointment: newAppointment)
     }
 
-    // 取最近的整點或半點
+    // MARK: - Apple Calendar 同步邏輯
+
+    func addToAppleCalendar(appointment: Appointment) {
+        eventStore.requestFullAccessToEvents { granted, error in
+            DispatchQueue.main.async {
+                if granted && error == nil {
+                    let event = EKEvent(eventStore: self.eventStore)
+
+                    // 標題
+                    event.title = "\(self.service.name) @ \(self.shop.name)"
+
+                    // 開始 / 結束時間
+                    event.startDate = self.selectedDate
+                    event.endDate   = self.endTime
+
+                    // 地點
+                    event.location = self.shop.address
+
+                    // 備註內容
+                    var notes = "🏪 店家：\(self.shop.name)"
+                    notes += "\n💆 服務：\(self.service.name)"
+                    notes += "\n⏱ 時長：\(self.service.duration) 分鐘"
+                    notes += "\n💰 費用：$\(Int(self.service.price))"
+                    if let phone = self.shop.phone { notes += "\n📞 電話：\(phone)" }
+                    notes += "\n📍 地址：\(self.shop.address)"
+                    if !self.note.isEmpty { notes += "\n📝 備註：\(self.note)" }
+                    event.notes = notes
+
+                    // 加入日曆提醒（與 App 通知同步）
+                    for option in self.selectedReminders {
+                        let alarm = EKAlarm(relativeOffset: TimeInterval(-option.minutesBefore * 60))
+                        event.addAlarm(alarm)
+                    }
+
+                    event.calendar = self.eventStore.defaultCalendarForNewEvents
+
+                    do {
+                        try self.eventStore.save(event, span: .thisEvent)
+                        self.calendarStatusMessage =
+                            "已將「\(self.service.name)」加入預約列表與 Apple 日曆 📅\n\n店家：\(self.shop.name)\n時間：\(self.selectedDate.formatted(date: .long, time: .shortened))"
+                        self.isBookingConfirmed = true
+                    } catch {
+                        self.calendarStatusMessage =
+                            "預約已儲存至 App ✅\n但日曆同步失敗：\(error.localizedDescription)"
+                        self.isBookingConfirmed = false
+                    }
+                } else {
+                    // 無日曆權限，仍完成預約
+                    self.calendarStatusMessage =
+                        "預約已儲存至 App ✅\n\n若要同步至 Apple 日曆，請至「設定 → 隱私權 → 行事曆」開啟存取權限。"
+                    self.isBookingConfirmed = true
+                }
+                self.isShowingStatusAlert = true
+            }
+        }
+    }
+
+    // MARK: - 工具
+
     static func nextHalfHour() -> Date {
         let cal = Calendar.current
         let now = Date()
@@ -214,7 +276,3 @@ struct ShopBookingView: View {
     }
 }
 
-class BookingNotificationHelper: ObservableObject {
-    // Add any published properties in the future if needed
-    init() {}
-}

@@ -19,6 +19,7 @@
 		5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A55F2F80C62700FE6FA7 /* ReportView.swift */; };
 		5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5612F80C62700FE6FA7 /* HistoryView.swift */; };
 		5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */; };
+		5898F3352F84C668008B1899 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F3342F84C668008B1899 /* MoreView.swift */; };
 		58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAB2F825422002310E9 /* NotificationManager.swift */; };
 		58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */; };
 		58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */; };
@@ -29,7 +30,6 @@
 		58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC12F825E92002310E9 /* InvoiceView.swift */; };
 		58CB6CC42F825ED4002310E9 /* CategorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */; };
 		58CB6CC82F829A8D002310E9 /* LifestyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC72F829A8D002310E9 /* LifestyleManager.swift */; };
-		58CB6CCC2F829AA5002310E9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CCA2F829AA5002310E9 /* SettingsView.swift */; };
 		58CB6CCD2F829AA5002310E9 /* LifestyleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CC92F829AA5002310E9 /* LifestyleSettingsView.swift */; };
 		58CB6CD12F82A18F002310E9 /* GeneralTransation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CD02F82A17B002310E9 /* GeneralTransation.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +69,7 @@
 		5872A5632F80C62700FE6FA7 /* MemberManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManagementView.swift; sourceTree = "<group>"; };
 		5872A5672F80C62700FE6FA7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5872A5682F80C62700FE6FA7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5898F3342F84C668008B1899 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		58CB6CAB2F825422002310E9 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentListView.swift; sourceTree = "<group>"; };
 		58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAppointmentView.swift; sourceTree = "<group>"; };
@@ -80,7 +81,6 @@
 		58CB6CC32F825ED4002310E9 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
 		58CB6CC72F829A8D002310E9 /* LifestyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifestyleManager.swift; sourceTree = "<group>"; };
 		58CB6CC92F829AA5002310E9 /* LifestyleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifestyleSettingsView.swift; sourceTree = "<group>"; };
-		58CB6CCA2F829AA5002310E9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		58CB6CD02F82A17B002310E9 /* GeneralTransation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTransation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -238,7 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				58CB6CC92F829AA5002310E9 /* LifestyleSettingsView.swift */,
-				58CB6CCA2F829AA5002310E9 /* SettingsView.swift */,
+				5898F3342F84C668008B1899 /* MoreView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -369,8 +369,8 @@
 				5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */,
 				5874B5C62F80D3F7003AE4E8 /* DataManager.swift in Sources */,
 				5874B5CE2F80D417003AE4E8 /* ReportView.swift in Sources */,
+				5898F3352F84C668008B1899 /* MoreView.swift in Sources */,
 				5874B5D02F80D41E003AE4E8 /* MemberManagementView.swift in Sources */,
-				58CB6CCC2F829AA5002310E9 /* SettingsView.swift in Sources */,
 				58CB6CCD2F829AA5002310E9 /* LifestyleSettingsView.swift in Sources */,
 				5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */,
 				5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */,

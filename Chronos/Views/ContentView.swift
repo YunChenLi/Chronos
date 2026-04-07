@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Chronos
+//  KinKeep
 //
 
 internal import SwiftUI
@@ -29,16 +29,10 @@ struct ContentView: View {
                 deleteAction: deleteAppointments
             )
             .tabItem {
-                Label("預約列表", systemImage: "list.bullet.clipboard")
+                Label("預約", systemImage: "list.bullet.clipboard")
             }
 
-            // Tab 2: 預約歷史
-            HistoryView(appointments: appointments)
-                .tabItem {
-                    Label("預約歷史", systemImage: "clock.fill")
-                }
-
-            // Tab 3: 收入/支出
+            // Tab 2: 收入/支出
             IncomeExpenseView(
                 appointments: appointments,
                 generalTransactions: $generalTransactions,
@@ -46,30 +40,28 @@ struct ContentView: View {
                 saveAction: saveTransactions
             )
             .tabItem {
-                Label("收入/支出", systemImage: "dollarsign.circle.fill")
+                Label("收支", systemImage: "dollarsign.circle.fill")
             }
 
-            // Tab 4: 支出報告
+            // Tab 3: 支出報告
             ReportView(
                 appointments: appointments,
                 generalTransactions: generalTransactions,
                 members: members
             )
             .tabItem {
-                Label("支出報告", systemImage: "chart.bar.fill")
+                Label("報告", systemImage: "chart.bar.fill")
             }
 
-            // Tab 5: 成員管理
-            MemberManagementView(members: $members, saveAction: saveMembers)
-                .tabItem {
-                    Label("成員管理", systemImage: "person.3.fill")
-                }
-
-            // Tab 6: 設定（含生活型態）
-            SettingsView()
-                .tabItem {
-                    Label("設定", systemImage: "gearshape.fill")
-                }
+            // Tab 4: 更多（成員管理、預約歷史、設定）
+            MoreView(
+                members: $members,
+                appointments: appointments,
+                saveMembersAction: saveMembers
+            )
+            .tabItem {
+                Label("更多", systemImage: "ellipsis.circle.fill")
+            }
         }
         .tint(.indigo)
     }
@@ -86,7 +78,6 @@ struct ContentView: View {
 
         for appointment in appointmentsToDelete {
             if let index = appointments.firstIndex(where: { $0.id == appointment.id }) {
-                // 🆕 使用 NotificationManager 取消所有提醒
                 NotificationManager.cancelReminders(for: appointment)
                 appointments.remove(at: index)
             }

@@ -125,6 +125,21 @@ struct ShopDatabase {
             imageSystemIcon: "hand.raised.fill"
         ),
         Shop(
+            name: "A&M 美甲沙龍",
+            category: .nail,
+            address: "桃園市中壢區高鐵站前西路二段99號",
+            phone: "03-2873939",
+            latitude: 25.00726, longitude: 121.22051,
+            rating: 5, reviewCount: 136,
+            openingHours: "10:00 - 22:00",
+            services: [
+                ShopService(name: "💅 基礎美甲", duration: 60, price: 600),
+                ShopService(name: "✨ 光療延甲", duration: 90, price: 1200),
+                ShopService(name: "🎨 手繪彩甲", duration: 120, price: 1800),
+            ],
+            imageSystemIcon: "hand.raised.fill"
+        ),
+        Shop(
             name: "康健家庭診所",
             category: .clinic,
             address: "台北市松山區八德路三段 200 號",

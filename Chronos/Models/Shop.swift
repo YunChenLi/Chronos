@@ -170,6 +170,21 @@ struct ShopDatabase {
             imageSystemIcon: "figure.run"
         ),
         Shop(
+            name: "初心格鬥TrueFight",
+            category: .fitness,
+            address: "桃園市楊梅區楊新北路101號3樓",
+            phone: "0985362343",
+            latitude: 24.91296, longitude: 121.15093,
+            rating: 5, reviewCount: 43,
+            openingHours: "10:00 - 22:00",
+            services: [
+                ShopService(name: "💪 私人教練課", duration: 60, price: 1500),
+                ShopService(name: "拳擊", duration: 60, price: 500),
+                ShopService(name: "泰拳", duration: 45, price: 600),
+            ],
+            imageSystemIcon: "figure.run"
+        ),
+        Shop(
             name: "原燒日式燒肉",
             category: .restaurant,
             address: "台北市大安區復興南路一段 107 號",

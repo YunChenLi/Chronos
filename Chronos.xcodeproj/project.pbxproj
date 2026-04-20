@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		580811A62F8745770040B07C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 580811A52F8745770040B07C /* GoogleService-Info.plist */; };
+		580811A92F95E2820040B07C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 580811A82F95E2820040B07C /* FirebaseCore */; };
+		580811AB2F95E2820040B07C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 580811AA2F95E2820040B07C /* FirebaseFirestore */; };
+		580811AD2F95EB490040B07C /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580811AC2F95EB490040B07C /* FirebaseManager.swift */; };
 		5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */; };
 		5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */; };
 		5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5502F80C62700FE6FA7 /* Appointment.swift */; };
@@ -58,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		580811A52F8745770040B07C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		580811AC2F95EB490040B07C /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		584A4F662EB6F563002C5A4B /* Chronos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chronos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F772EB6F565002C5A4B /* ChronosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +102,8 @@
 		584A4F632EB6F563002C5A4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				580811A92F95E2820040B07C /* FirebaseCore in Frameworks */,
+				580811AB2F95E2820040B07C /* FirebaseFirestore in Frameworks */,
 			);
 		};
 		584A4F742EB6F565002C5A4B /* Frameworks */ = {
@@ -163,6 +169,7 @@
 		5872A5552F80C62700FE6FA7 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				580811AC2F95EB490040B07C /* FirebaseManager.swift */,
 				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
 				58CB6CAB2F825422002310E9 /* NotificationManager.swift */,
 			);
@@ -280,6 +287,10 @@
 			buildRules = (
 			);
 			name = Chronos;
+			packageProductDependencies = (
+				580811A82F95E2820040B07C /* FirebaseCore */,
+				580811AA2F95E2820040B07C /* FirebaseFirestore */,
+			);
 			productName = Chronos;
 			productReference = 584A4F662EB6F563002C5A4B /* Chronos.app */;
 			productType = "com.apple.product-type.application";
@@ -355,6 +366,9 @@
 			);
 			mainGroup = 584A4F5D2EB6F563002C5A4B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = 584A4F672EB6F563002C5A4B /* Products */;
 			projectDirPath = "";
@@ -402,6 +416,7 @@
 				58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */,
 				58CB6CC22F825E92002310E9 /* InvoiceView.swift in Sources */,
 				58CB6CC82F829A8D002310E9 /* LifestyleManager.swift in Sources */,
+				580811AD2F95EB490040B07C /* FirebaseManager.swift in Sources */,
 				58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */,
 				58CB6CB42F825461002310E9 /* ContentView.swift in Sources */,
 				58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */,
@@ -835,6 +850,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.12.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		580811A82F95E2820040B07C /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		580811AA2F95E2820040B07C /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 584A4F5E2EB6F563002C5A4B /* Project object */;
 }

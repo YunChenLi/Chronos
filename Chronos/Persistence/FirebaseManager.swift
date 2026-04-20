@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+internal import Combine
 
 class FirebaseManager: ObservableObject {
     static let shared = FirebaseManager()

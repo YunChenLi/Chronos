@@ -8,12 +8,14 @@ import MapKit
 import CoreLocation
 internal import Combine
 
+
 struct ExploreView: View {
     @Binding var appointments: [Appointment]
     let members: [Member]
     var saveAction: () -> Void
 
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var firebaseManager = FirebaseManager.shared
     @State private var searchText = ""
     @State private var selectedCategory: ShopCategory? = nil
     @State private var viewMode: ViewMode = .list
@@ -28,7 +30,7 @@ struct ExploreView: View {
     enum ViewMode { case list, map }
 
     var filteredShops: [Shop] {
-        ShopDatabase.shops.filter { shop in
+        firebaseManager.shops.filter { shop in
             let matchCategory = selectedCategory == nil || shop.category == selectedCategory
             let matchSearch = searchText.isEmpty
                 || shop.name.localizedCaseInsensitiveContains(searchText)
@@ -67,6 +69,21 @@ struct ExploreView: View {
                     members: members,
                     saveAction: saveAction
                 )
+            }
+            .onAppear { firebaseManager.fetchShops() }
+            .overlay {
+                if firebaseManager.isLoading {
+                    ZStack {
+                        Color.black.opacity(0.1).ignoresSafeArea()
+                        VStack(spacing: 12) {
+                            ProgressView()
+                            Text("載入店家資料中...").font(.caption).foregroundColor(.secondary)
+                        }
+                        .padding(20)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(12)
+                    }
+                }
             }
         }
     }
@@ -128,7 +145,9 @@ struct ExploreView: View {
     private var shopListView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                if sortedShops.isEmpty {
+                if firebaseManager.isLoading {
+                    ProgressView("載入中...").padding(.top, 60)
+                } else if sortedShops.isEmpty {
                     VStack(spacing: 16) {
                         Image(systemName: "mappin.slash").font(.largeTitle).foregroundColor(.secondary)
                         Text("找不到符合條件的店家").foregroundColor(.secondary)
@@ -376,6 +395,7 @@ struct RoundedCorner: Shape {
 // MARK: - 定位管理器
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    
     private let manager = CLLocationManager()
     @Published var userLocation: CLLocation?
 

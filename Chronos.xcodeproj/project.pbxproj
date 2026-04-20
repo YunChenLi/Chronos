@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		580811A62F8745770040B07C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 580811A52F8745770040B07C /* GoogleService-Info.plist */; };
 		5874B5C12F80D3B4003AE4E8 /* ChronosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54C2F80C62700FE6FA7 /* ChronosApp.swift */; };
 		5874B5C22F80D3E2003AE4E8 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A54E2F80C62700FE6FA7 /* Color+Hex.swift */; };
 		5874B5C32F80D3E9003AE4E8 /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A5502F80C62700FE6FA7 /* Appointment.swift */; };
@@ -56,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		580811A52F8745770040B07C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		584A4F662EB6F563002C5A4B /* Chronos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chronos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F772EB6F565002C5A4B /* ChronosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		584A4F812EB6F565002C5A4B /* ChronosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,6 +235,7 @@
 		5872A5692F80C62700FE6FA7 /* Chronos */ = {
 			isa = PBXGroup;
 			children = (
+				580811A52F8745770040B07C /* GoogleService-Info.plist */,
 				5872A54D2F80C62700FE6FA7 /* App */,
 				5872A54F2F80C62700FE6FA7 /* Extensions */,
 				5872A5532F80C62700FE6FA7 /* Models */,
@@ -368,6 +371,7 @@
 		584A4F642EB6F563002C5A4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
+				580811A62F8745770040B07C /* GoogleService-Info.plist in Resources */,
 			);
 		};
 		584A4F752EB6F565002C5A4B /* Resources */ = {

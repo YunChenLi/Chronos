@@ -26,12 +26,17 @@
 		5898F3352F84C668008B1899 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F3342F84C668008B1899 /* MoreView.swift */; };
 		5898F3372F84C865008B1899 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F3362F84C865008B1899 /* Shop.swift */; };
 		5898F33C2F84C88B008B1899 /* ShopDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F33A2F84C88B008B1899 /* ShopDetailView.swift */; };
-		5898F33D2F84C88B008B1899 /* ShopBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F3392F84C88B008B1899 /* ShopBookingView.swift */; };
 		5898F33E2F84C88B008B1899 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5898F3382F84C88B008B1899 /* ExploreView.swift */; };
+		58BB26C82F9F21BE000B3321 /* ShopBookingView_Updated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26C72F9F21BE000B3321 /* ShopBookingView_Updated.swift */; };
+		58BB26CC2F9F21E3000B3321 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26C92F9F21E3000B3321 /* AuthView.swift */; };
+		58BB26CD2F9F21E3000B3321 /* MyBookingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26CA2F9F21E3000B3321 /* MyBookingsView.swift */; };
+		58BB26CF2F9F21FB000B3321 /* ContentView_Updated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26CE2F9F21FB000B3321 /* ContentView_Updated.swift */; };
+		58BB26D12F9F2212000B3321 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D02F9F2212000B3321 /* AppUser.swift */; };
+		58BB26D42F9F2220000B3321 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D22F9F2220000B3321 /* AuthManager.swift */; };
+		58BB26D52F9F2220000B3321 /* BookingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D32F9F2220000B3321 /* BookingManager.swift */; };
 		58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAB2F825422002310E9 /* NotificationManager.swift */; };
 		58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */; };
 		58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */; };
-		58CB6CB42F825461002310E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB32F825461002310E9 /* ContentView.swift */; };
 		58CB6CB62F825511002310E9 /* AddAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB52F825511002310E9 /* AddAppointmentView.swift */; };
 		58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB72F825B6A002310E9 /* ImagePicker.swift */; };
 		58CB6CBB2F825E18002310E9 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CB92F825E18002310E9 /* CategoryManager.swift */; };
@@ -82,12 +87,17 @@
 		5898F3342F84C668008B1899 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		5898F3362F84C865008B1899 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		5898F3382F84C88B008B1899 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
-		5898F3392F84C88B008B1899 /* ShopBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBookingView.swift; sourceTree = "<group>"; };
 		5898F33A2F84C88B008B1899 /* ShopDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailView.swift; sourceTree = "<group>"; };
+		58BB26C72F9F21BE000B3321 /* ShopBookingView_Updated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBookingView_Updated.swift; sourceTree = "<group>"; };
+		58BB26C92F9F21E3000B3321 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		58BB26CA2F9F21E3000B3321 /* MyBookingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookingsView.swift; sourceTree = "<group>"; };
+		58BB26CE2F9F21FB000B3321 /* ContentView_Updated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView_Updated.swift; sourceTree = "<group>"; };
+		58BB26D02F9F2212000B3321 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
+		58BB26D22F9F2220000B3321 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		58BB26D32F9F2220000B3321 /* BookingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingManager.swift; sourceTree = "<group>"; };
 		58CB6CAB2F825422002310E9 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentListView.swift; sourceTree = "<group>"; };
 		58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAppointmentView.swift; sourceTree = "<group>"; };
-		58CB6CB32F825461002310E9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		58CB6CB52F825511002310E9 /* AddAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentView.swift; sourceTree = "<group>"; };
 		58CB6CB72F825B6A002310E9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		58CB6CB92F825E18002310E9 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
@@ -162,6 +172,7 @@
 				5872A5522F80C62700FE6FA7 /* Member.swift */,
 				58CB6CB92F825E18002310E9 /* CategoryManager.swift */,
 				5898F3362F84C865008B1899 /* Shop.swift */,
+				58BB26D02F9F2212000B3321 /* AppUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,6 +183,8 @@
 				580811AC2F95EB490040B07C /* FirebaseManager.swift */,
 				5872A5542F80C62700FE6FA7 /* DataManager.swift */,
 				58CB6CAB2F825422002310E9 /* NotificationManager.swift */,
+				58BB26D22F9F2220000B3321 /* AuthManager.swift */,
+				58BB26D32F9F2220000B3321 /* BookingManager.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -227,6 +240,7 @@
 		5872A5662F80C62700FE6FA7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				58BB26CB2F9F21E3000B3321 /* Auth */,
 				5898F33B2F84C88B008B1899 /* Explore */,
 				58CB6CCB2F829AA5002310E9 /* Settings */,
 				5872A5592F80C62700FE6FA7 /* Appointment */,
@@ -234,7 +248,7 @@
 				5872A5602F80C62700FE6FA7 /* Finance */,
 				5872A5622F80C62700FE6FA7 /* History */,
 				5872A5642F80C62700FE6FA7 /* Member */,
-				58CB6CB32F825461002310E9 /* ContentView.swift */,
+				58BB26CE2F9F21FB000B3321 /* ContentView_Updated.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -258,10 +272,19 @@
 			isa = PBXGroup;
 			children = (
 				5898F3382F84C88B008B1899 /* ExploreView.swift */,
-				5898F3392F84C88B008B1899 /* ShopBookingView.swift */,
+				58BB26C72F9F21BE000B3321 /* ShopBookingView_Updated.swift */,
 				5898F33A2F84C88B008B1899 /* ShopDetailView.swift */,
 			);
 			path = Explore;
+			sourceTree = "<group>";
+		};
+		58BB26CB2F9F21E3000B3321 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				58BB26C92F9F21E3000B3321 /* AuthView.swift */,
+				58BB26CA2F9F21E3000B3321 /* MyBookingsView.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		58CB6CCB2F829AA5002310E9 /* Settings */ = {
@@ -418,21 +441,26 @@
 				58CB6CC82F829A8D002310E9 /* LifestyleManager.swift in Sources */,
 				580811AD2F95EB490040B07C /* FirebaseManager.swift in Sources */,
 				58CB6CB82F825B6A002310E9 /* ImagePicker.swift in Sources */,
-				58CB6CB42F825461002310E9 /* ContentView.swift in Sources */,
+				58BB26C82F9F21BE000B3321 /* ShopBookingView_Updated.swift in Sources */,
 				58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */,
 				5874B5CF2F80D41B003AE4E8 /* HistoryView.swift in Sources */,
 				58CB6CD12F82A18F002310E9 /* GeneralTransation.swift in Sources */,
 				58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */,
 				5874B5CA2F80D40A003AE4E8 /* CalendarGridView.swift in Sources */,
+				58BB26CC2F9F21E3000B3321 /* AuthView.swift in Sources */,
+				58BB26CD2F9F21E3000B3321 /* MyBookingsView.swift in Sources */,
 				5898F33C2F84C88B008B1899 /* ShopDetailView.swift in Sources */,
-				5898F33D2F84C88B008B1899 /* ShopBookingView.swift in Sources */,
 				5898F33E2F84C88B008B1899 /* ExploreView.swift in Sources */,
 				5874B5CB2F80D40D003AE4E8 /* ProportionChart.swift in Sources */,
+				58BB26D12F9F2212000B3321 /* AppUser.swift in Sources */,
 				58CB6CC42F825ED4002310E9 /* CategorySettingsView.swift in Sources */,
 				5898F3372F84C865008B1899 /* Shop.swift in Sources */,
+				58BB26CF2F9F21FB000B3321 /* ContentView_Updated.swift in Sources */,
 				58CB6CB62F825511002310E9 /* AddAppointmentView.swift in Sources */,
 				5874B5CC2F80D411003AE4E8 /* AddGeneralTransactionView.swift in Sources */,
 				5874B5CD2F80D414003AE4E8 /* IncomeExpenseView.swift in Sources */,
+				58BB26D42F9F2220000B3321 /* AuthManager.swift in Sources */,
+				58BB26D52F9F2220000B3321 /* BookingManager.swift in Sources */,
 				5874B5C52F80D3F3003AE4E8 /* Member.swift in Sources */,
 			);
 		};

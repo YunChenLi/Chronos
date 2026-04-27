@@ -5,7 +5,7 @@
 //  加入登入判斷：未登入顯示 AuthView，已登入顯示主介面
 //
 
-import SwiftUI
+internal import SwiftUI
 import UserNotifications
 
 struct ContentView: View {

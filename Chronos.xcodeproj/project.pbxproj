@@ -34,6 +34,8 @@
 		58BB26D12F9F2212000B3321 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D02F9F2212000B3321 /* AppUser.swift */; };
 		58BB26D42F9F2220000B3321 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D22F9F2220000B3321 /* AuthManager.swift */; };
 		58BB26D52F9F2220000B3321 /* BookingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB26D32F9F2220000B3321 /* BookingManager.swift */; };
+		58BB26D72F9F6BFD000B3321 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 58BB26D62F9F6BFD000B3321 /* FirebaseAuth */; };
+		58BB26D92F9F6C48000B3321 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 58BB26D82F9F6C48000B3321 /* FirebaseAuthCombine-Community */; };
 		58CB6CAC2F825422002310E9 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAB2F825422002310E9 /* NotificationManager.swift */; };
 		58CB6CB12F82542B002310E9 /* EditAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAF2F82542B002310E9 /* EditAppointmentView.swift */; };
 		58CB6CB22F82542B002310E9 /* AppointmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CB6CAE2F82542B002310E9 /* AppointmentListView.swift */; };
@@ -113,7 +115,9 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				580811A92F95E2820040B07C /* FirebaseCore in Frameworks */,
+				58BB26D72F9F6BFD000B3321 /* FirebaseAuth in Frameworks */,
 				580811AB2F95E2820040B07C /* FirebaseFirestore in Frameworks */,
+				58BB26D92F9F6C48000B3321 /* FirebaseAuthCombine-Community in Frameworks */,
 			);
 		};
 		584A4F742EB6F565002C5A4B /* Frameworks */ = {
@@ -313,6 +317,8 @@
 			packageProductDependencies = (
 				580811A82F95E2820040B07C /* FirebaseCore */,
 				580811AA2F95E2820040B07C /* FirebaseFirestore */,
+				58BB26D62F9F6BFD000B3321 /* FirebaseAuth */,
+				58BB26D82F9F6C48000B3321 /* FirebaseAuthCombine-Community */,
 			);
 			productName = Chronos;
 			productReference = 584A4F662EB6F563002C5A4B /* Chronos.app */;
@@ -900,6 +906,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		58BB26D62F9F6BFD000B3321 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		58BB26D82F9F6C48000B3321 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580811A72F95E2820040B07C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -5,7 +5,7 @@
 //  登入 / 註冊介面
 //
 
-import SwiftUI
+internal import SwiftUI
 
 struct AuthView: View {
     @StateObject private var authManager = AuthManager.shared

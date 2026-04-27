@@ -8,8 +8,11 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+internal import Combine
 
 class AuthManager: ObservableObject {
+    let objectWillChange = ObservableObjectPublisher()
+    
     static let shared = AuthManager()
 
     @Published var currentUser: AppUser? = nil
@@ -21,14 +24,17 @@ class AuthManager: ObservableObject {
     private var authStateListener: AuthStateDidChangeListenerHandle?
 
     init() {
-        // 監聽登入狀態變化
-        authStateListener = Auth.auth().addStateDidChangeListener { [weak self] _, firebaseUser in
-            if let firebaseUser = firebaseUser {
-                self?.fetchUserData(uid: firebaseUser.uid)
-            } else {
-                DispatchQueue.main.async {
-                    self?.currentUser = nil
-                    self?.isLoggedIn = false
+        // 監聽登入狀態變化（延後到下一個 runloop，避免在初始化期間觸發發布）
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.authStateListener = Auth.auth().addStateDidChangeListener { [weak self] _, firebaseUser in
+                if let firebaseUser = firebaseUser {
+                    self?.fetchUserData(uid: firebaseUser.uid)
+                } else {
+                    DispatchQueue.main.async {
+                        self?.currentUser = nil
+                        self?.isLoggedIn = false
+                    }
                 }
             }
         }
@@ -141,8 +147,8 @@ class AuthManager: ObservableObject {
     // MARK: - 友善錯誤訊息（中文）
 
     private func friendlyError(_ error: Error) -> String {
-        let code = AuthErrorCode(_nsError: error as NSError)
-        switch code.code {
+        let code = AuthErrorCode(_bridgedNSError: error as NSError)
+        switch code?.code {
         case .emailAlreadyInUse:    return "此電子郵件已被註冊"
         case .invalidEmail:         return "電子郵件格式不正確"
         case .weakPassword:         return "密碼至少需要 6 個字元"

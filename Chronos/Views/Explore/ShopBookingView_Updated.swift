@@ -5,7 +5,7 @@
 //  更新：預約確認後同時寫入 Firebase bookings 集合
 //
 
-import SwiftUI
+internal import SwiftUI
 import EventKit
 
 struct ShopBookingView: View {

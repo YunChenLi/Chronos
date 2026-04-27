@@ -5,7 +5,7 @@
 //  消費者查看自己的線上預約記錄
 //
 
-import SwiftUI
+internal import SwiftUI
 
 struct MyBookingsView: View {
     @StateObject private var bookingManager = BookingManager.shared

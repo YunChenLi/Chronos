@@ -7,8 +7,10 @@
 
 import Foundation
 import FirebaseFirestore
+internal import Combine
 
 class BookingManager: ObservableObject {
+    
     static let shared = BookingManager()
 
     private let db = Firestore.firestore()
@@ -127,3 +129,4 @@ class BookingManager: ObservableObject {
         return booking
     }
 }
+

@@ -2,8 +2,6 @@
 //  AuthView.swift
 //  KinKeep
 //
-//  登入 / 註冊介面
-//
 
 internal import SwiftUI
 
@@ -30,16 +28,12 @@ struct SignInView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
 
-    var isDisabled: Bool {
-        email.isEmpty || password.isEmpty || authManager.isLoading
-    }
-
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 32) {
 
-                    // MARK: Logo
+                    // Logo
                     VStack(spacing: 12) {
                         ZStack {
                             Circle()
@@ -53,14 +47,12 @@ struct SignInView: View {
                                 .font(.system(size: 36))
                                 .foregroundColor(.white)
                         }
-                        Text("KinKeep")
-                            .font(.largeTitle).fontWeight(.bold)
-                        Text("你的家庭預約管家")
-                            .font(.subheadline).foregroundColor(.secondary)
+                        Text("KinKeep").font(.largeTitle).fontWeight(.bold)
+                        Text("你的家庭預約管家").font(.subheadline).foregroundColor(.secondary)
                     }
                     .padding(.top, 40)
 
-                    // MARK: 輸入欄位
+                    // 輸入欄位
                     VStack(spacing: 16) {
                         AuthTextField(
                             title: "電子郵件",
@@ -69,7 +61,6 @@ struct SignInView: View {
                             text: $email,
                             keyboardType: .emailAddress
                         )
-
                         AuthSecureField(
                             title: "密碼",
                             placeholder: "請輸入密碼",
@@ -79,17 +70,16 @@ struct SignInView: View {
                     }
                     .padding(.horizontal)
 
-                    // MARK: 錯誤訊息
+                    // 錯誤訊息
                     if let error = authManager.errorMessage {
                         HStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.red)
+                            Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.red)
                             Text(error).font(.caption).foregroundColor(.red)
                         }
                         .padding(.horizontal)
                     }
 
-                    // MARK: 登入按鈕
+                    // 按鈕
                     VStack(spacing: 12) {
                         Button {
                             authManager.signIn(email: email, password: password)
@@ -98,20 +88,14 @@ struct SignInView: View {
                                 if authManager.isLoading {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text("登入")
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.white)
+                                    Text("登入").fontWeight(.semibold).foregroundColor(.white)
                                 }
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding(14)
-                            .background(isDisabled ? Color.gray : Color.indigo)
-                            .cornerRadius(12)
+                            .frame(maxWidth: .infinity).padding(14)
+                            .background(Color.indigo).cornerRadius(12)
                         }
-                        .disabled(isDisabled)
                         .padding(.horizontal)
 
-                        // 分隔線
                         HStack {
                             Rectangle().fill(Color.secondary.opacity(0.3)).frame(height: 1)
                             Text("或").font(.caption).foregroundColor(.secondary)
@@ -119,17 +103,13 @@ struct SignInView: View {
                         }
                         .padding(.horizontal)
 
-                        // 前往註冊
                         Button {
                             authManager.errorMessage = nil
                             isShowingSignUp = true
                         } label: {
                             HStack {
-                                Text("還沒有帳號？")
-                                    .foregroundColor(.secondary)
-                                Text("立即註冊")
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.indigo)
+                                Text("還沒有帳號？").foregroundColor(.secondary)
+                                Text("立即註冊").fontWeight(.semibold).foregroundColor(.indigo)
                             }
                             .font(.subheadline)
                         }
@@ -154,12 +134,25 @@ struct SignUpView: View {
     @State private var confirmPassword = ""
     @State private var isPasswordVisible = false
 
-    var passwordMatch: Bool { password == confirmPassword }
+    // 各欄位驗證
+    var nameOK: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
+    var emailOK: Bool { email.contains("@") && email.contains(".") }
+    var passwordOK: Bool { password.count >= 6 }
+    var confirmOK: Bool { !confirmPassword.isEmpty && password == confirmPassword }
 
-    var isDisabled: Bool {
-        name.isEmpty || email.isEmpty || password.isEmpty
-            || confirmPassword.isEmpty || !passwordMatch
-            || authManager.isLoading
+    var allValid: Bool { nameOK && emailOK && passwordOK && confirmOK }
+
+    // 顯示各欄位提示
+    var passwordHint: String? {
+        if password.isEmpty { return nil }
+        if password.count < 6 { return "密碼至少需要 6 個字元" }
+        return nil
+    }
+
+    var confirmHint: String? {
+        if confirmPassword.isEmpty { return nil }
+        if password != confirmPassword { return "兩次密碼不相符" }
+        return nil
     }
 
     var body: some View {
@@ -167,21 +160,22 @@ struct SignUpView: View {
             ScrollView {
                 VStack(spacing: 24) {
 
-                    // MARK: 標題
                     VStack(spacing: 8) {
                         Text("建立帳號").font(.largeTitle).fontWeight(.bold)
                         Text("開始使用 KinKeep").foregroundColor(.secondary)
                     }
                     .padding(.top, 20)
 
-                    // MARK: 輸入欄位
                     VStack(spacing: 14) {
+                        // 姓名
                         AuthTextField(
                             title: "姓名",
                             placeholder: "請輸入你的姓名",
                             icon: "person.fill",
                             text: $name
                         )
+
+                        // 電子郵件
                         AuthTextField(
                             title: "電子郵件",
                             placeholder: "請輸入電子郵件",
@@ -189,6 +183,11 @@ struct SignUpView: View {
                             text: $email,
                             keyboardType: .emailAddress
                         )
+                        if !email.isEmpty && !emailOK {
+                            HintText("請輸入有效的電子郵件格式", color: .orange)
+                        }
+
+                        // 手機（選填）
                         AuthTextField(
                             title: "手機號碼（選填）",
                             placeholder: "09XX-XXX-XXX",
@@ -196,30 +195,45 @@ struct SignUpView: View {
                             text: $phone,
                             keyboardType: .phonePad
                         )
+
+                        // 密碼
                         AuthSecureField(
                             title: "密碼（至少 6 碼）",
                             placeholder: "請輸入密碼",
                             text: $password,
                             isVisible: $isPasswordVisible
                         )
+                        if let hint = passwordHint {
+                            HintText(hint, color: .orange)
+                        }
+
+                        // 確認密碼
                         AuthSecureField(
                             title: "確認密碼",
                             placeholder: "請再次輸入密碼",
                             text: $confirmPassword,
                             isVisible: $isPasswordVisible
                         )
-
-                        if !confirmPassword.isEmpty && !passwordMatch {
-                            HStack {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
-                                Text("兩次密碼不相符").font(.caption).foregroundColor(.orange)
-                            }
+                        if let hint = confirmHint {
+                            HintText(hint, color: .red)
                         }
                     }
                     .padding(.horizontal)
 
-                    // MARK: 錯誤訊息
+                    // 所有條件狀態（debug 用，方便知道哪個沒過）
+                    VStack(alignment: .leading, spacing: 4) {
+                        ValidationRow(label: "姓名已填寫", isValid: nameOK)
+                        ValidationRow(label: "電子郵件格式正確", isValid: emailOK)
+                        ValidationRow(label: "密碼至少 6 碼", isValid: passwordOK)
+                        ValidationRow(label: "兩次密碼一致", isValid: confirmOK)
+                    }
+                    .padding(.horizontal)
+                    .padding(12)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+
+                    // Firebase 錯誤訊息
                     if let error = authManager.errorMessage {
                         HStack {
                             Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.red)
@@ -228,25 +242,28 @@ struct SignUpView: View {
                         .padding(.horizontal)
                     }
 
-                    // MARK: 按鈕
                     VStack(spacing: 12) {
+                        // 建立帳號按鈕（不用 disabled，改用顏色提示）
                         Button {
-                            authManager.signUp(name: name, email: email,
-                                               password: password, phone: phone)
+                            guard allValid else { return }
+                            authManager.signUp(
+                                name: name.trimmingCharacters(in: .whitespaces),
+                                email: email.trimmingCharacters(in: .whitespaces),
+                                password: password,
+                                phone: phone
+                            )
                         } label: {
                             HStack {
                                 if authManager.isLoading {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text("建立帳號")
-                                        .fontWeight(.semibold).foregroundColor(.white)
+                                    Text("建立帳號").fontWeight(.semibold).foregroundColor(.white)
                                 }
                             }
                             .frame(maxWidth: .infinity).padding(14)
-                            .background(isDisabled ? Color.gray : Color.indigo)
+                            .background(allValid ? Color.indigo : Color.gray)
                             .cornerRadius(12)
                         }
-                        .disabled(isDisabled)
                         .padding(.horizontal)
 
                         Button {
@@ -264,6 +281,39 @@ struct SignUpView: View {
                 }
             }
             .navigationBarHidden(true)
+        }
+    }
+}
+
+// MARK: - 小元件
+
+struct HintText: View {
+    let text: String
+    let color: Color
+    init(_ text: String, color: Color) {
+        self.text = text
+        self.color = color
+    }
+    var body: some View {
+        HStack {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundColor(color)
+            Text(text).font(.caption).foregroundColor(color)
+            Spacer()
+        }
+        .padding(.leading, 4)
+    }
+}
+
+struct ValidationRow: View {
+    let label: String
+    let isValid: Bool
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: isValid ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(isValid ? .green : .secondary)
+                .font(.caption)
+            Text(label).font(.caption)
+                .foregroundColor(isValid ? .primary : .secondary)
         }
     }
 }
@@ -323,3 +373,4 @@ struct AuthSecureField: View {
         }
     }
 }
+

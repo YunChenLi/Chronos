@@ -2,17 +2,13 @@
 //  AuthManager.swift
 //  KinKeep
 //
-//  處理 Firebase Authentication 登入、登出、註冊
-//
 
 import Foundation
+internal import Combine
 import FirebaseAuth
 import FirebaseFirestore
-internal import Combine
 
 class AuthManager: ObservableObject {
-    let objectWillChange = ObservableObjectPublisher()
-    
     static let shared = AuthManager()
 
     @Published var currentUser: AppUser? = nil
@@ -24,56 +20,74 @@ class AuthManager: ObservableObject {
     private var authStateListener: AuthStateDidChangeListenerHandle?
 
     init() {
-        // 監聽登入狀態變化（延後到下一個 runloop，避免在初始化期間觸發發布）
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.authStateListener = Auth.auth().addStateDidChangeListener { [weak self] _, firebaseUser in
-                if let firebaseUser = firebaseUser {
-                    self?.fetchUserData(uid: firebaseUser.uid)
-                } else {
-                    DispatchQueue.main.async {
-                        self?.currentUser = nil
-                        self?.isLoggedIn = false
-                    }
+        authStateListener = Auth.auth().addStateDidChangeListener { [weak self] _, firebaseUser in
+            print("🔥 Auth state changed: \(firebaseUser?.uid ?? "nil")")
+            if let firebaseUser = firebaseUser {
+                self?.fetchUserData(uid: firebaseUser.uid)
+            } else {
+                DispatchQueue.main.async {
+                    self?.currentUser = nil
+                    self?.isLoggedIn = false
                 }
             }
         }
     }
 
-    // MARK: - 電子郵件註冊
+    // MARK: - 註冊
 
     func signUp(name: String, email: String, password: String, phone: String) {
-        isLoading = true
-        errorMessage = nil
+        print("🚀 signUp called: \(email)")
+        
+        DispatchQueue.main.async {
+            self.isLoading = true
+            self.errorMessage = nil
+        }
 
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
+            print("📬 createUser callback received")
+
             if let error = error {
+                print("❌ createUser error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     self?.isLoading = false
-                    self?.errorMessage = self?.friendlyError(error) ?? error.localizedDescription
+                    self?.errorMessage = error.localizedDescription
                 }
                 return
             }
 
-            guard let uid = result?.user.uid else { return }
+            guard let uid = result?.user.uid else {
+                print("❌ No UID returned")
+                DispatchQueue.main.async {
+                    self?.isLoading = false
+                    self?.errorMessage = "無法取得用戶 ID，請重試"
+                }
+                return
+            }
 
-            // 建立用戶資料到 Firestore
+            print("✅ User created: \(uid)")
             let newUser = AppUser(id: uid, name: name, email: email, phone: phone)
             self?.saveUserToFirestore(newUser)
         }
     }
 
-    // MARK: - 電子郵件登入
+    // MARK: - 登入
 
     func signIn(email: String, password: String) {
-        isLoading = true
-        errorMessage = nil
+        print("🚀 signIn called: \(email)")
+        DispatchQueue.main.async {
+            self.isLoading = true
+            self.errorMessage = nil
+        }
 
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] _, error in
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+            print("📬 signIn callback received")
             DispatchQueue.main.async {
                 self?.isLoading = false
                 if let error = error {
-                    self?.errorMessage = self?.friendlyError(error) ?? error.localizedDescription
+                    print("❌ signIn error: \(error.localizedDescription)")
+                    self?.errorMessage = error.localizedDescription
+                } else {
+                    print("✅ signIn success: \(result?.user.uid ?? "nil")")
                 }
             }
         }
@@ -85,15 +99,23 @@ class AuthManager: ObservableObject {
         try? Auth.auth().signOut()
     }
 
-    // MARK: - 取得用戶資料
+    // MARK: - 讀取用戶資料
 
     private func fetchUserData(uid: String) {
+        print("📖 fetchUserData: \(uid)")
         db.collection("users").document(uid).getDocument { [weak self] snapshot, error in
+            print("📬 fetchUserData callback received")
             DispatchQueue.main.async {
                 self?.isLoading = false
 
+                if let error = error {
+                    print("❌ fetchUserData error: \(error.localizedDescription)")
+                    self?.errorMessage = "讀取用戶資料失敗"
+                    return
+                }
+
                 if let data = snapshot?.data() {
-                    // 從 Firestore 解析用戶資料
+                    print("✅ User data found: \(data)")
                     let roleRaw = data["role"] as? String ?? "consumer"
                     let user = AppUser(
                         id: uid,
@@ -106,7 +128,7 @@ class AuthManager: ObservableObject {
                     self?.currentUser = user
                     self?.isLoggedIn = true
                 } else {
-                    // 用戶資料不存在（第一次 Google 登入等情況）
+                    print("⚠️ No user data, creating new...")
                     if let firebaseUser = Auth.auth().currentUser {
                         let newUser = AppUser(
                             id: uid,
@@ -123,39 +145,31 @@ class AuthManager: ObservableObject {
     // MARK: - 儲存用戶至 Firestore
 
     private func saveUserToFirestore(_ user: AppUser) {
+        print("💾 saveUserToFirestore: \(user.id)")
         var data: [String: Any] = [
             "name": user.name,
             "email": user.email,
             "role": user.role.rawValue,
             "createdAt": Timestamp(date: user.createdAt)
         ]
-        if let phone = user.phone { data["phone"] = phone }
+        if let phone = user.phone, !phone.isEmpty { data["phone"] = phone }
         if let shopID = user.shopID { data["shopID"] = shopID }
 
         db.collection("users").document(user.id).setData(data) { [weak self] error in
+            print("📬 saveUserToFirestore callback received")
             DispatchQueue.main.async {
-                if error == nil {
+                if let error = error {
+                    print("❌ saveUser error: \(error.localizedDescription)")
+                    self?.errorMessage = "用戶資料儲存失敗：\(error.localizedDescription)"
+                    self?.isLoading = false
+                } else {
+                    print("✅ User saved successfully, setting isLoggedIn = true")
                     self?.currentUser = user
                     self?.isLoggedIn = true
-                } else {
-                    self?.errorMessage = "用戶資料儲存失敗，請重試"
+                    self?.isLoading = false
                 }
             }
         }
     }
-
-    // MARK: - 友善錯誤訊息（中文）
-
-    private func friendlyError(_ error: Error) -> String {
-        let code = AuthErrorCode(_bridgedNSError: error as NSError)
-        switch code?.code {
-        case .emailAlreadyInUse:    return "此電子郵件已被註冊"
-        case .invalidEmail:         return "電子郵件格式不正確"
-        case .weakPassword:         return "密碼至少需要 6 個字元"
-        case .wrongPassword:        return "密碼錯誤，請重試"
-        case .userNotFound:         return "找不到此帳號，請先註冊"
-        case .networkError:         return "網路連線失敗，請檢查網路"
-        default:                    return "發生錯誤，請重試"
-        }
-    }
 }
+

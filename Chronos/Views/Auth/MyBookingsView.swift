@@ -5,7 +5,7 @@
 //  消費者查看自己的線上預約記錄
 //
 
-internal import SwiftUI
+import internal swiftUI
 
 struct MyBookingsView: View {
     @StateObject private var bookingManager = BookingManager.shared
@@ -52,9 +52,9 @@ struct MyBookingsView: View {
             }
             .navigationTitle("我的預約")
             .onAppear {
-                if let userID = authManager.currentUser?.id {
-                    bookingManager.fetchMyBookings(consumerID: userID)
-                }
+                guard let userID = authManager.currentUser?.id else { return }
+                // Call the booking manager to refresh user's bookings. Update the method name if your API differs.
+                bookingManager.fetchMyBookings(consumerID: userID)
             }
         }
     }
@@ -106,3 +106,4 @@ struct BookingCard: View {
         .padding(.vertical, 4)
     }
 }
+

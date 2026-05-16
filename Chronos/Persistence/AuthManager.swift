@@ -16,12 +16,24 @@ class AuthManager: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
 
+    // 新增：判斷當前使用者是否為訪客
+    var isGuestUser: Bool {
+        return currentUser?.id == "GUEST_USER_ID"
+    }
+
     private let db = Firestore.firestore()
     private var authStateListener: AuthStateDidChangeListenerHandle?
 
     init() {
         authStateListener = Auth.auth().addStateDidChangeListener { [weak self] _, firebaseUser in
             print("🔥 Auth state changed: \(firebaseUser?.uid ?? "nil")")
+            
+            // 如果我們正在訪客模式，不要因為 firebaseUser 是 nil 就登出
+            if self?.isGuestUser == true {
+                print("👤 Currently in Guest Mode, ignoring Firebase auth nil state.")
+                return
+            }
+
             if let firebaseUser = firebaseUser {
                 self?.fetchUserData(uid: firebaseUser.uid)
             } else {
@@ -30,6 +42,34 @@ class AuthManager: ObservableObject {
                     self?.isLoggedIn = false
                 }
             }
+        }
+    }
+
+    // MARK: - 訪客登入 (Guest Mode)
+
+    func signInAsGuest() {
+        print("🚀 signInAsGuest called")
+        DispatchQueue.main.async {
+            self.isLoading = true
+            self.errorMessage = nil
+        }
+
+        // 模擬短暫的載入時間
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            // 建立一個訪客用的 AppUser
+            let guestUser = AppUser(
+                id: "GUEST_USER_ID", // 特殊的 ID 用來辨識訪客
+                name: "訪客",
+                email: "guest@kinkeep.app",
+                phone: nil,
+                role: .consumer, // 或者您可以為 UserRole 新增一個 .guest
+                shopID: nil
+            )
+            
+            self?.currentUser = guestUser
+            self?.isLoggedIn = true
+            self?.isLoading = false
+            print("✅ Entered Guest Mode successfully")
         }
     }
 
@@ -82,12 +122,13 @@ class AuthManager: ObservableObject {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             print("📬 signIn callback received")
             DispatchQueue.main.async {
-                self?.isLoading = false
                 if let error = error {
+                    self?.isLoading = false
                     print("❌ signIn error: \(error.localizedDescription)")
                     self?.errorMessage = error.localizedDescription
                 } else {
                     print("✅ signIn success: \(result?.user.uid ?? "nil")")
+                    // signIn 成功後，Firebase 的 listener 會觸發 fetchUserData 並設定 isLoading = false
                 }
             }
         }
@@ -96,6 +137,17 @@ class AuthManager: ObservableObject {
     // MARK: - 登出
 
     func signOut() {
+        print("🚀 signOut called")
+        // 如果是訪客，直接清除本地狀態即可
+        if isGuestUser {
+            DispatchQueue.main.async {
+                self.currentUser = nil
+                self.isLoggedIn = false
+            }
+            return
+        }
+
+        // 如果是正式用戶，呼叫 Firebase 登出
         try? Auth.auth().signOut()
     }
 
@@ -172,4 +224,3 @@ class AuthManager: ObservableObject {
         }
     }
 }
-

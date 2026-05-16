@@ -214,7 +214,7 @@ struct ShopBookingView: View {
                 date: selectedDate,
                 note: note.isEmpty ? nil : note
             )
-            BookingManager.shared.createBooking(onlineBooking) { success in
+            BookingManager.shared.createBooking(onlineBooking) { success, error  in
                 print(success ? "✅ 預約已同步至 Firebase" : "⚠️ Firebase 同步失敗")
             }
         }
